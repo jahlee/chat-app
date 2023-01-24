@@ -3,10 +3,12 @@ import {BrowserRouter as Router, Routes, Route, Link} from "react-router-dom";
 import Login from './Login';
 import Home from './pages/Home';
 import Chats from './pages/Chats';
+import { useState } from "react"; 
 // import { Register } from './Register';
 
 
   function App() {
+    const [isAuth, setIsAuth] = useState(false);
     return (
       <Router>
         <nav class="navbar">
@@ -16,7 +18,7 @@ import Chats from './pages/Chats';
         </nav>
         <Routes>
           <Route path="/" element={<Home/>}></Route>
-          <Route path="/login" element={<Login/>}></Route>
+          <Route path="/login" element={<Login setIsAuth={setIsAuth}/>}></Route>
           <Route path="/chats" element={<Chats/>}></Route>
         </Routes>
       </Router>

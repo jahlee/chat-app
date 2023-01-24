@@ -1,5 +1,6 @@
 import React from 'react';
-
+import { auth, provider } from './firebase-config';
+import { signInWithPopup } from 'firebase/auth';
 
 class Login extends React.Component {
     constructor(props) {
@@ -14,6 +15,7 @@ class Login extends React.Component {
       this.changeUsername = this.changeUsername.bind(this);
       this.changePassword = this.changePassword.bind(this);
       this.handleSubmit = this.handleSubmit.bind(this);
+      this.googleSignIn = this.googleSignIn.bind(this);
       
     }
   
@@ -31,16 +33,30 @@ class Login extends React.Component {
         event.preventDefault(); // prevents page from reloading and us losing our state
         }
     }
+
+    googleSignIn() {
+        signInWithPopup(auth, provider).then((res) => {
+            alert(res);
+            localStorage.setItem("isAuth", true);
+            this.props.setIsAuth(true);
+        });
+    }
   
     render() {
       return (
-        <form onSubmit={this.handleSubmit} class='App-header'>
-          <label>
-            <input type="text" value={this.state.username} onChange={this.changeUsername} placeholder="Username"/>
-            <input type="password" value={this.state.handle} onChange={this.changePassword} placeholder="Password"/>
-            <input type="submit" value="Submit" />
-          </label>
-        </form>
+        <div>
+            <form onSubmit={this.handleSubmit} class='App-header'>
+            <label>
+                <input type="text" value={this.state.username} onChange={this.changeUsername} placeholder="Username"/>
+                <input type="password" value={this.state.handle} onChange={this.changePassword} placeholder="Password"/>
+                <input type="submit" value="Submit" />
+            </label>
+            </form>
+            <div className="googleLogin">
+                <p> or sign in with Google</p>
+                <button className="login-with-google-btn" onClick={this.googleSignIn}>sign in</button>
+            </div>
+        </div>
       );
     }
   }
