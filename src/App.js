@@ -6,11 +6,10 @@ import Chats from './pages/Chats';
 // import { Register } from './Register';
 
 
-
   function App() {
     return (
       <Router>
-        <nav>
+        <nav class="navbar">
           <Link to="/">Home</Link>
           <Link to="login">Login</Link>
           <Link to="chats">Chats</Link>
