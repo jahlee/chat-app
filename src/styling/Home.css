@@ -1,0 +1,64 @@
+/* body {
+    background-color: #F1F1F1;
+} */
+
+a:hover {
+color: #001F3F;
+} 
+.homepage-container {
+display: flex;
+flex-direction: column;
+align-items: center;
+font-family: Arial, sans-serif;
+padding: 2rem;
+box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+border-radius: 5px;
+}
+
+.homepage-header {
+background-color: #4CAF50;
+color: white;
+padding: 1rem;
+text-align: center;
+border-top-left-radius: 5px;
+border-top-right-radius: 5px;
+}
+
+.homepage-nav {
+display: flex;
+justify-content: space-around;
+background-color: #4CAF50;
+color: white;
+padding: 0.5rem;
+}
+
+.homepage-nav a {
+color: white;
+text-decoration: none;
+}
+
+.homepage-main {
+width: 80%;
+margin: 1rem;
+}
+
+.homepage-footer {
+background-color: #4CAF50;
+color: white;
+text-align: center;
+padding: 1rem;
+border-bottom-left-radius: 5px;
+border-bottom-right-radius: 5px;
+}
+
+/* Media Queries -- when the viewport width is 600 pixels or less */
+
+@media (max-width: 600px) {
+    .homepage-container {
+      width: 90%;
+    }
+  
+    .homepage-main {
+      width: 100%;
+    }
+  }
