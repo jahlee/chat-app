@@ -1,0 +1,49 @@
+.chat-input {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #f0f0f0;
+  padding: 10px;
+}
+
+.chat-input-message {
+  flex: 1;
+  margin-right: 10px;
+  font-size: 16px;
+  padding: 10px;
+  border: none;
+  border-radius: 10px;
+  outline: none;
+  background-color: #fff;
+  resize: none;
+  line-height: 1.5;
+  overflow: auto;
+}
+
+.chat-input-send-button {
+  border: none;
+  background-color: #0084ff;
+  color: #fff;
+  font-size: 16px;
+  padding: 10px;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+.chat-input-file-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background-color: #fff;
+  color: #0084ff;
+  font-size: 16px;
+  padding: 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.chat-input-file {
+  display: none;
+}

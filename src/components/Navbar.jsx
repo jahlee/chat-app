@@ -11,12 +11,12 @@ function Navbar(props) {
           {!isAuth ? (
             <React.Fragment>
               <div className="nav-left">
-                <NavLink className="navbar-title" to="/" exact aria-label="Home">
+                <NavLink className="navbar-title" to="/" aria-label="Home">
                   ChatApp
                 </NavLink>
               </div>
               <div className="nav-right">
-                <NavLink className="navbar-link" to="login" exact aria-label="Login" >
+                <NavLink className="navbar-link" to="login" aria-label="Login" >
                   Login
                 </NavLink>
               </div>
@@ -25,17 +25,17 @@ function Navbar(props) {
             <React.Fragment>
               {location.pathname === '/profile' && (
                 <div className="nav-left">
-                <NavLink className="navbar-link" to="chats" exact aria-label="Chats">
+                <NavLink className="navbar-link" to="chats" aria-label="Chats">
                   <span className="navbar-back">&lt;</span>
                   </NavLink>
                 </div>
               )}
               {location.pathname === '/chats' && (
                 <div className="nav-right">
-                  <NavLink className="navbar-link" to="profile" exact aria-label="Profile">
+                  <NavLink className="navbar-link" to="profile" aria-label="Profile">
                     Profile
                   </NavLink>
-                  <NavLink className="navbar-link" to="#" exact onClick={() => logOut()} aria-label="Log Out">
+                  <NavLink className="navbar-link" to="#" onClick={() => logOut()} aria-label="Log Out">
                     Log Out
                   </NavLink>
                 </div>
