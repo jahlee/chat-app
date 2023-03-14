@@ -1,0 +1,33 @@
+.login-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.login-heading {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.facebook-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  background-color: #3b5998;
+  border: none;
+  padding: 16px;
+  cursor: pointer;
+  width: 240px;
+  height: 50px;
+  border-radius: 0;
+  margin: 1rem;
+}
+
+.facebook-login {
+  margin-left: 1.5rem;
+  display: inline;
+}

@@ -1,50 +1,9 @@
 .App {
-  background-color: #36454f;
-  color: white;
   align-items: center;
   justify-content: center;
-  height: 100vh;
 }
 
 a:hover {
-  color: #001F3F;
+  color: #001f3f;
   cursor: pointer;
-}
-/* .App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-} */
-
-input {
-  margin: 0.5rem 0;
-  padding: 1rem;
-  border:none;
-  border-radius: 10px;
-}
-
-button {
-  margin: 0.5rem 0;
-  padding: 1rem;
-  border-radius: 10px;
-  background-color: white;
-  cursor: pointer;
-}
-
-.navbar-link {
-  display: block;
-  padding: 10px 15px;
-  color: #fff2cc;
-  text-decoration: none;
-  font-size: 16px;
-  transition: 0.2s ease-in-out;
-}
-
-.navbar-link:hover {
-  background-color: #fff2cc;
 }

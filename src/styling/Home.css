@@ -1,64 +1,94 @@
-/* body {
-    background-color: #F1F1F1;
-} */
-
-a:hover {
-color: #001F3F;
-} 
 .homepage-container {
-display: flex;
-flex-direction: column;
-align-items: center;
-font-family: Arial, sans-serif;
-padding: 2rem;
-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
 }
 
 .homepage-header {
-background-color: #4CAF50;
-color: white;
-padding: 1rem;
-text-align: center;
-border-top-left-radius: 5px;
-border-top-right-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 10%;
+  color: #fff;
+  margin: 10px;
+  font-size: larger;
 }
 
 .homepage-nav {
-display: flex;
-justify-content: space-around;
-background-color: #4CAF50;
-color: white;
-padding: 0.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* background-color: #444; */
 }
 
 .homepage-nav a {
-color: white;
-text-decoration: none;
+  color: #fff;
+  text-decoration: none;
+  margin: 0 20px;
+  font-size: 1.2rem;
 }
 
+.homepage-nav a:hover {
+  color: #00bcd4;
+}
+
+.nav-line {
+  width: 25%;
+  margin: 20px auto 0px auto;
+  border-bottom: 2px solid #fff;
+}
 .homepage-main {
-width: 80%;
-margin: 1rem;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  /* background-color: #252525; */
+  color: #fff;
+  padding: 2rem;
+}
+
+.homepage-main section {
+  width: 80%;
+  margin: 0 auto;
+}
+
+.homepage-main h2 {
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+}
+
+.homepage-main p {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+}
+
+.homepage-main ul {
+  list-style-type: none;
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+li::before {
+  content: "\2192 "; /* right arrow symbol */
+  color: #999; /* arrow color */
+  margin-right: 0.5em; /* space between arrow and text */
+}
+
+.homepage-main li {
+  margin: 10px 0;
 }
 
 .homepage-footer {
-background-color: #4CAF50;
-color: white;
-text-align: center;
-padding: 1rem;
-border-bottom-left-radius: 5px;
-border-bottom-right-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 5%;
+  background-color: #444;
+  color: #fff;
 }
 
-/* Media Queries -- when the viewport width is 600 pixels or less */
-
-@media (max-width: 600px) {
-    .homepage-container {
-      width: 90%;
-    }
-  
-    .homepage-main {
-      width: 100%;
-    }
-  }
+.homepage-footer p {
+  font-size: 1.2rem;
+}
