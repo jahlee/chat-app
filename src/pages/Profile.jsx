@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import EditProfile from "./EditProfile";
+import EditProfile from "../components/EditProfile";
 import editIcon from "../assets/edit.svg";
 
 function Profile() {
