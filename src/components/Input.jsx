@@ -4,9 +4,10 @@ import { faFileImage } from "@fortawesome/free-regular-svg-icons";
 import '../styling/Input.css';
 
 
-export default function Input() {
+export default function Input(props) {
+    const {setMessage} = props;
     const [inputValue, setInputValue] = useState('');
-    const [file, setFile] = useState(null);
+    const [files, setFiles] = useState(null);
 
     function handleInputChange(event) {
         setInputValue(event.target.value);
@@ -20,9 +21,9 @@ export default function Input() {
         }
     }
 
-    function handleFileChange(event) {
-        setFile(event.target.files);
-        console.log('file:', file);
+    function handleFilesChange(event) {
+        setFiles(event.target.files);
+        console.log('files:', files);
     }
 
     function handleSendMessage(event) {
@@ -31,9 +32,10 @@ export default function Input() {
         // display message on frontend
             // need prop of function that changes frontend messages
         // send data to backend
+        handleSendMessage(inputValue, files);
         console.log(inputValue, 'sent')
         setInputValue('');
-        setFile(null);
+        setFiles(null);
     }
 
   return (
@@ -44,7 +46,7 @@ export default function Input() {
       <input
         type="file"
         id="file-input"
-        onChange={handleFileChange}
+        onChange={handleFilesChange}
         className="chat-input-file"
       />
       <textarea
