@@ -3,7 +3,7 @@ import Conversation from "../components/Conversation";
 
 function Chats() {
     return <div>
-        hi
+        This is the chats page
         <Conversation/>
     </div>;
 }

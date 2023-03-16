@@ -5,7 +5,7 @@ import '../styling/Input.css';
 
 
 export default function Input(props) {
-    const {setMessage} = props;
+    const {sendMessage} = props;
     const [inputValue, setInputValue] = useState('');
     const [files, setFiles] = useState(null);
 
@@ -32,7 +32,7 @@ export default function Input(props) {
         // display message on frontend
             // need prop of function that changes frontend messages
         // send data to backend
-        handleSendMessage(inputValue, files);
+        sendMessage(inputValue, files);
         console.log(inputValue, 'sent')
         setInputValue('');
         setFiles(null);
