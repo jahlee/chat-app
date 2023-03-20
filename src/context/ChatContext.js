@@ -2,7 +2,7 @@ import { createContext, useState } from "react";
 
 const ChatContext = createContext();
 
-export function AuthProvider({children}) {
+export function ChatProvider({children}) {
     const [chat, setChat] = useState([]);
     return (
         <ChatContext.Provider>{children}</ChatContext.Provider>

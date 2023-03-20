@@ -2,7 +2,7 @@ import { createContext, useState } from "react";
 
 const UserContext = createContext();
 
-export function AuthProvider({children}) {
+export function UserProvider({children}) {
     const [user, setUser] = useState(null);
     return (
         <UserContext.Provider>{children}</UserContext.Provider>

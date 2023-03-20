@@ -6,6 +6,7 @@ import Chats from "./pages/Chats";
 import Profile from "./pages/Profile";
 import Navbar from "./components/Navbar";
 import { UserProvider } from "./context/UserContext";
+import { ChatProvider } from "./context/ChatContext";
 import { useState } from "react";
 import { signOut } from "firebase/auth";
 import { auth } from "./firebase-config";
@@ -21,7 +22,8 @@ function App() {
     });
   };
   return (
-    <AuthProvider>
+    <UserProvider>
+    <ChatProvider>
     <Router>
       <div className="App">
         <Navbar isAuth={isAuth} logOut={logOut} />
@@ -36,7 +38,8 @@ function App() {
         </Routes>
       </div>
     </Router>
-    </AuthProvider>
+    </ChatProvider>
+    </UserProvider>
   );
 }
 
