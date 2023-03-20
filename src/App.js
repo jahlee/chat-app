@@ -5,6 +5,7 @@ import Home from "./pages/Home";
 import Chats from "./pages/Chats";
 import Profile from "./pages/Profile";
 import Navbar from "./components/Navbar";
+import { UserProvider } from "./context/UserContext";
 import { useState } from "react";
 import { signOut } from "firebase/auth";
 import { auth } from "./firebase-config";
@@ -20,6 +21,7 @@ function App() {
     });
   };
   return (
+    <AuthProvider>
     <Router>
       <div className="App">
         <Navbar isAuth={isAuth} logOut={logOut} />
@@ -30,10 +32,11 @@ function App() {
           <Route
             path="/login"
             element={<Login setIsAuth={setIsAuth} />}
-          ></Route>
+            ></Route>
         </Routes>
       </div>
     </Router>
+    </AuthProvider>
   );
 }
 
