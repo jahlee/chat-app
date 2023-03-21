@@ -1,21 +1,24 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { db, storage } from '../firebase-config';
 import { ref } from 'firebase/storage'; 
-import { addDoc, doc, collection, onSnapshot } from '@firebase/firestore';
+import { addDoc, doc, collection, onSnapshot, query, where } from '@firebase/firestore';
+import UserContext from '../context/UserContext';
 import Input from './Input';
 
 export default function Conversation() {
   const [conversation, setConversation] = useState([]);
   const [loading, setLoading] = useState(false);
-  const firebaseRef = collection(db, process.env.REACT_APP_DB_MESSAGES);
+  const { user, setUser } = useContext(UserContext);
+  const firebaseRef = collection(db, 'users');
   const storageRef = ref(storage);
+  const userQuery = query(firebaseRef, where('users', 'array-contains', user.userId))
 
   // load messages + use handler to get messages
   useEffect(() => {
     setLoading(true);
     // snapShot better than just `get()` becauase it has a listener to update
     // in real-time. 
-    const unsubscribe = onSnapshot(firebaseRef, (querySnapshot) => {
+    const unsubscribe = onSnapshot(userQuery, (querySnapshot) => {
       const items = [];
       querySnapshot.forEach((doc) => {
         items.push(doc.data());
