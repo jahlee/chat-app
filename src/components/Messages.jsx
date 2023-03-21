@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
+import React, { useState } from "react";
 
 export default function Messages() {
   return (
-    <div></div>
+    <div>{/* retrieve X conversations and show the preview of them */}</div>
   );
 }

@@ -1,5 +1,5 @@
 import React from "react";
-import '../styling/Home.css';
+import "../styling/Home.css";
 
 function Home() {
   return (
@@ -16,9 +16,18 @@ function Home() {
       <main className="homepage-main">
         <section id="about">
           <h2>About</h2>
-          <p>This is a chat app where you can create a profile and chat with friends.</p>
-          <p>In future updates, the app will also feature end-to-end encryption for secure communication between users.</p>
-          <p>Also, you will be able to create group chats with multiple friends and send files such as images and documents.</p>
+          <p>
+            This is a chat app where you can create a profile and chat with
+            friends.
+          </p>
+          <p>
+            In future updates, the app will also feature end-to-end encryption
+            for secure communication between users.
+          </p>
+          <p>
+            Also, you will be able to create group chats with multiple friends
+            and send files such as images and documents.
+          </p>
           <p>We will also let you see send/receive updates.</p>
         </section>
         <section id="features">
@@ -35,8 +44,14 @@ function Home() {
         </section>
         <section id="contact">
           <h2>Contact</h2>
-          <p>For more information, please contact us at michael.scott@gmail.com</p>
-          <p>You can also follow us on Twitter at <a href="https://twitter.com/chat_app">@chat_app</a> for updates and news.</p>
+          <p>
+            For more information, please contact us at michael.scott@gmail.com
+          </p>
+          <p>
+            You can also follow us on Twitter at{" "}
+            <a href="https://twitter.com/chat_app">@chat_app</a> for updates and
+            news.
+          </p>
         </section>
       </main>
       <footer className="homepage-footer">

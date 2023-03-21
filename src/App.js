@@ -23,22 +23,22 @@ function App() {
   };
   return (
     <UserProvider>
-    <ChatProvider>
-    <Router>
-      <div className="App">
-        <Navbar isAuth={isAuth} logOut={logOut} />
-        <Routes className="page-content">
-          <Route path="/" element={<Home />}></Route>
-          <Route path="/profile" element={<Profile />}></Route>
-          <Route path="/chats" element={<Chats />}></Route>
-          <Route
-            path="/login"
-            element={<Login setIsAuth={setIsAuth} />}
-            ></Route>
-        </Routes>
-      </div>
-    </Router>
-    </ChatProvider>
+      <ChatProvider>
+        <Router>
+          <div className="App">
+            <Navbar isAuth={isAuth} logOut={logOut} />
+            <Routes className="page-content">
+              <Route path="/" element={<Home />}></Route>
+              <Route path="/profile" element={<Profile />}></Route>
+              <Route path="/chats" element={<Chats />}></Route>
+              <Route
+                path="/login"
+                element={<Login setIsAuth={setIsAuth} />}
+              ></Route>
+            </Routes>
+          </div>
+        </Router>
+      </ChatProvider>
     </UserProvider>
   );
 }
