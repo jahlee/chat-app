@@ -10,7 +10,7 @@ import {
   where,
 } from "@firebase/firestore";
 import UserContext from "../context/UserContext";
-import Input from "./Input";
+import ChatInput from "./ChatInput";
 
 export default function Conversation() {
   const [conversation, setConversation] = useState([]);
@@ -87,7 +87,7 @@ export default function Conversation() {
         </div>
       ))}
       <button onClick={() => sendMessage("hi", null)}>Send hi</button>
-      <Input sendMessage={sendMessage} />
+      <ChatInput sendMessage={sendMessage} />
     </>
   );
 }

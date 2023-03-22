@@ -1,16 +1,16 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFileImage } from "@fortawesome/free-regular-svg-icons";
-import "../styling/Input.css";
+import "../styling/ChatInput.css";
 
-export default function Input(props) {
+export default function ChatInput(props) {
   const { sendMessage } = props;
-  const [inputValue, setInputValue] = useState("");
+  const [chatInputValue, setChatInputValue] = useState("");
   const [files, setFiles] = useState(null);
 
-  function handleInputChange(event) {
-    setInputValue(event.target.value);
-    console.log("changed value to: ", inputValue);
+  function handleChatInputChange(event) {
+    setChatInputValue(event.target.value);
+    console.log("changed value to: ", chatInputValue);
   }
 
   function handleEnter(event) {
@@ -31,9 +31,9 @@ export default function Input(props) {
     // display message on frontend
     // need prop of function that changes frontend messages
     // send data to backend
-    sendMessage(inputValue, files);
-    console.log(inputValue, "sent");
-    setInputValue("");
+    sendMessage(chatInputValue, files);
+    console.log(chatInputValue, "sent");
+    setChatInputValue("");
     setFiles(null);
   }
 
@@ -51,8 +51,8 @@ export default function Input(props) {
       <textarea
         type="text"
         placeholder="Type a message..."
-        value={inputValue}
-        onChange={handleInputChange}
+        value={chatInputValue}
+        onChange={handleChatInputChange}
         onKeyDown={handleEnter}
         className="chat-input-message"
       />
