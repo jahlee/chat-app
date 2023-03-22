@@ -23,11 +23,6 @@ function Navbar(props) {
         </React.Fragment>
       ) : (
         <React.Fragment>
-          <div className="nav-left">
-            <NavLink className="navbar-title" to="/chats" aria-label="Home">
-              ChatApp
-            </NavLink>
-          </div>
           {location.pathname === "/profile" && (
             <div className="nav-left">
               <NavLink className="navbar-link" to="chats" aria-label="Chats">
@@ -36,23 +31,30 @@ function Navbar(props) {
             </div>
           )}
           {location.pathname !== "/profile" && (
-            <div className="nav-right">
-              <NavLink
-                className="navbar-link"
-                to="profile"
-                aria-label="Profile"
-              >
-                Profile
-              </NavLink>
-              <NavLink
-                className="navbar-link"
-                to="#"
-                onClick={() => logOut()}
-                aria-label="Log Out"
-              >
-                Log Out
-              </NavLink>
-            </div>
+            <React.Fragment>
+              <div className="nav-left">
+                <NavLink className="navbar-title" to="/" aria-label="Home">
+                  ChatApp
+                </NavLink>
+              </div>
+              <div className="nav-right">
+                <NavLink
+                  className="navbar-link"
+                  to="profile"
+                  aria-label="Profile"
+                >
+                  Profile
+                </NavLink>
+                <NavLink
+                  className="navbar-link"
+                  to="#"
+                  onClick={() => logOut()}
+                  aria-label="Log Out"
+                >
+                  Log Out
+                </NavLink>
+              </div>
+            </React.Fragment>
           )}
         </React.Fragment>
       )}

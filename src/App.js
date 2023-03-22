@@ -28,7 +28,7 @@ function App() {
           <div className="App">
             <Navbar isAuth={isAuth} logOut={logOut} />
             <Routes className="page-content">
-              <Route path="/" element={<Home />}></Route>
+              <Route path="/" element={<Home isAuth={isAuth} />}></Route>
               <Route path="/profile" element={<Profile />}></Route>
               <Route path="/chats" element={<Chats />}></Route>
               <Route
