@@ -23,6 +23,11 @@ function Navbar(props) {
         </React.Fragment>
       ) : (
         <React.Fragment>
+          <div className="nav-left">
+            <NavLink className="navbar-title" to="/chats" aria-label="Home">
+              ChatApp
+            </NavLink>
+          </div>
           {location.pathname === "/profile" && (
             <div className="nav-left">
               <NavLink className="navbar-link" to="chats" aria-label="Chats">
@@ -30,7 +35,7 @@ function Navbar(props) {
               </NavLink>
             </div>
           )}
-          {location.pathname === "/chats" && (
+          {location.pathname !== "/profile" && (
             <div className="nav-right">
               <NavLink
                 className="navbar-link"
