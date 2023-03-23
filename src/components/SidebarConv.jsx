@@ -3,9 +3,10 @@ import React from "react";
 export default function SidebarConv({ id, preview, photo, timestamp }) {
   return (
     <li>
-      <img src={photo} alt="" />
-      <p>{preview}</p>
-      <p>{timestamp}</p>
+      sidebar conv:
+      <img src={photo} alt="img" />
+      <p>preview: {preview}</p>
+      <p>timestamp: {timestamp}</p>
     </li>
   );
 }

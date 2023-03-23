@@ -8,15 +8,16 @@ import UserContext from "../context/UserContext";
 function Chats() {
   const [currConv, setCurrConv] = useState(null);
   const [conversations, setConversations] = useState([]);
-  const { user, setUser } = useContext(UserContext);
-  const firebaseRef = collection(db, "conversations");
+  const { user } = useContext(UserContext);
+  const convRef = collection(db, "conversations");
   const conversationsQuery = query(
-    firebaseRef,
-    where("conversations", "array-contains", user.userId)
+    convRef,
+    where("participants", "array-contains", user.userId)
   );
 
   useEffect(() => {
     // get conversations from db
+    console.log(user.userId);
     const unsubscribe = onSnapshot(
       conversationsQuery,
       (querySnapshot) => {

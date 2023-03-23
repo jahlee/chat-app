@@ -76,7 +76,7 @@ export default function Conversation({ conv }) {
       };
       addDoc(firebaseRef, messageData);
     } catch (e) {
-      console.log(e);
+      console.error(e);
     }
     console.log("hi");
   }

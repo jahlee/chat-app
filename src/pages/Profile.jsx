@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import EditProfile from "../components/EditProfile";
 import editIcon from "../assets/edit.svg";
+import UserContext from "../context/UserContext";
 
 function Profile() {
-  const name = "Michael Scott";
+  const { user } = useContext(UserContext);
   const [editMode, setEditMode] = useState(false);
   return (
     <div className="profile">
@@ -13,7 +14,7 @@ function Profile() {
         </div>
       ) : (
         <div>
-          <h1>{name}</h1>
+          <h1>{JSON.stringify(user)}</h1>
           <p></p>
         </div>
       )}
