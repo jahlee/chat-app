@@ -8,34 +8,35 @@ import {
   onSnapshot,
   query,
   where,
+  serverTimestamp,
 } from "@firebase/firestore";
 import UserContext from "../context/UserContext";
 import ChatInput from "./ChatInput";
 
-export default function Conversation() {
-  const [conversation, setConversation] = useState([]);
+export default function Conversation({ conv }) {
+  const conversation_id = conv ? conv.conversation_id : null;
+  const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
   const { user, setUser } = useContext(UserContext);
-  const firebaseRef = collection(db, "users");
+  const firebaseRef = collection(db, "messages");
   const storageRef = ref(storage);
-  const userQuery = query(
+  const messagesQuery = query(
     firebaseRef,
-    where("users", "array-contains", user.userId)
+    where("conversation_id", "==", conversation_id)
   );
 
   // load messages + use handler to get messages
   useEffect(() => {
     setLoading(true);
-    // snapShot better than just `get()` becauase it has a listener to update
-    // in real-time.
+    // use snapshot for real-time listener
     const unsubscribe = onSnapshot(
-      userQuery,
+      messagesQuery,
       (querySnapshot) => {
         const items = [];
         querySnapshot.forEach((doc) => {
           items.push(doc.data());
         });
-        setConversation(items.reverse());
+        setMessages(items.reverse());
         setLoading(false);
         console.log(items);
       },
@@ -50,16 +51,10 @@ export default function Conversation() {
   function sendMessage(message, files) {
     try {
       const newDocRef = doc(firebaseRef);
-      const messageData = {
-        id: newDocRef.id,
-        text: message,
-        timestamp: new Date().toISOString(),
-      };
-      addDoc(firebaseRef, messageData);
       if (files && files.length > 0) {
         // eslint-disable-next-line array-callback-return
         files.map((file) => {
-          const timestamp = new Date().getTime();
+          const timestamp = serverTimestamp()();
           const fileName = `${timestamp}_${file.name}`;
           const fileRef = storageRef.child(fileName);
           fileRef
@@ -72,6 +67,14 @@ export default function Conversation() {
             });
         });
       }
+      const messageData = {
+        id: newDocRef.id,
+        text: message,
+        timestamp: serverTimestamp(),
+        conversation_id: conversation_id,
+        image_urls: files,
+      };
+      addDoc(firebaseRef, messageData);
     } catch (e) {
       console.log(e);
     }
@@ -80,13 +83,15 @@ export default function Conversation() {
 
   return (
     <>
-      {conversation.map((message) => (
+      {messages.map((message) => (
         <div key={message.id}>
           <p>{message.conversation_id}</p>
           <p>{message.text}</p>
         </div>
       ))}
-      <button onClick={() => sendMessage("hi", null)}>Send hi</button>
+      <button onClick={() => sendMessage(serverTimestamp(), null)}>
+        Send hi
+      </button>
       <ChatInput sendMessage={sendMessage} />
     </>
   );

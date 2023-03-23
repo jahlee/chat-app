@@ -1,12 +1,12 @@
 import React from "react";
 import Search from "./Search";
-import Messages from "./Messages";
+import Conversations from "./Conversations";
 
-export default function Sidebar() {
+export default function Sidebar({ conversations, setCurrConv }) {
   return (
     <div>
-      <Search />
-      <Messages />
+      <Search setCurrConv={setCurrConv} />
+      <Conversations conversations={conversations} />
     </div>
   );
 }

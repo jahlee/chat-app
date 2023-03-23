@@ -1,7 +1,17 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "../styling/Home.css";
 
-function Home() {
+function Home({ isAuth }) {
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (isAuth) {
+      navigate("/chats");
+    }
+  }, []);
+  if (isAuth) {
+    return <div>Loading...</div>;
+  }
   return (
     <div className="homepage-container">
       <header className="homepage-header">
