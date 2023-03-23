@@ -9,26 +9,29 @@ Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
 ## Page Hierarchy
 
-                app.js 
+```
+                app.js
                    |
        ----------------------------
        |         |       |        |
-   homepage   login   profile   chats 
+   homepage   login   profile   chats
                                   |
                         -------------------------------
                         |                             |
                      sidebar                    conversation
                         |                             |
                ------------------               -----------------
-               |                |               |               |          
-             search        conversations   list<messages>   chatinput 
-               |                |                         
+               |                |               |               |
+             search        conversations   list<messages>   chatinput
+               |                |
         -----------------    list<sidebarconv>
         |               |
     searchinput   searchdropdown
                             |
                     list<searchentry>
+```
 
+```
  ┌──────────────────────────────────────────────────────────┐
  │                         Chats Page                       │
  ├──────────────────────────────────────────────────────────┤
@@ -55,3 +58,4 @@ Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
  │  │└────────────────────────┘│   │     ChatInput        │ │
  │  └──────────────────────────┘   └──────────────────────┘ │
  └──────────────────────────────────────────────────────────┘
+```
