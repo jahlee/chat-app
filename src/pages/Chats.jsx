@@ -12,12 +12,11 @@ function Chats() {
   const convRef = collection(db, "conversations");
   const conversationsQuery = query(
     convRef,
-    where("participants", "array-contains", user.userId)
+    where("participants", "array-contains", user ? user.userId : null)
   );
 
   useEffect(() => {
     // get conversations from db
-    console.log(user.userId);
     const unsubscribe = onSnapshot(
       conversationsQuery,
       (querySnapshot) => {
@@ -39,7 +38,7 @@ function Chats() {
     );
 
     return () => unsubscribe();
-  }, []);
+  }, [user]);
 
   return (
     <div>

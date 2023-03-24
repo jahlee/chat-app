@@ -7,34 +7,19 @@ import Profile from "./pages/Profile";
 import Navbar from "./components/Navbar";
 import { UserProvider } from "./context/UserContext";
 import { ChatProvider } from "./context/ChatContext";
-import { useState } from "react";
-import { signOut } from "firebase/auth";
-import { auth } from "./firebase-config";
 
 function App() {
-  const [isAuth, setIsAuth] = useState(localStorage.getItem("isAuth"));
-  const logOut = () => {
-    signOut(auth).then(() => {
-      localStorage.clear();
-      setIsAuth(false);
-      // cannot use react-router-dom library outsive of router
-      window.location.pathname = "/login"; // alternative to useNavigate hook
-    });
-  };
   return (
     <UserProvider>
       <ChatProvider>
         <Router>
           <div className="App">
-            <Navbar isAuth={isAuth} logOut={logOut} />
+            <Navbar />
             <Routes className="page-content">
-              <Route path="/" element={<Home isAuth={isAuth} />}></Route>
+              <Route path="/" element={<Home />}></Route>
               <Route path="/profile" element={<Profile />}></Route>
               <Route path="/chats" element={<Chats />}></Route>
-              <Route
-                path="/login"
-                element={<Login setIsAuth={setIsAuth} />}
-              ></Route>
+              <Route path="/login" element={<Login />}></Route>
             </Routes>
           </div>
         </Router>

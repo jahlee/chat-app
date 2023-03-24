@@ -1,4 +1,3 @@
-import { useContext } from "react";
 import { auth, googleProvider, facebookProvider, db } from "../firebase-config";
 import { signInWithPopup } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
@@ -12,11 +11,9 @@ import {
 import GoogleButton from "react-google-button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSquareFacebook } from "@fortawesome/free-brands-svg-icons";
-import UserContext from "../context/UserContext";
 import "../styling/Login.css";
 
-function Login({ setIsAuth }) {
-  const { setUser } = useContext(UserContext);
+function Login() {
   const navigate = useNavigate();
 
   const handleSignIn = (provider) => {
@@ -25,7 +22,6 @@ function Login({ setIsAuth }) {
         localStorage.setItem("isAuth", true);
         console.log("login response:", res);
         console.log("user values:", res.user);
-        setIsAuth(true);
         navigate("/chats");
 
         // add/update user entry in firestore
@@ -35,16 +31,11 @@ function Login({ setIsAuth }) {
           const userData = docSnapshot.data();
           console.log("old user data:", userData);
           const newTimestamp = serverTimestamp();
-          await updateDoc(userDoc, { last_logged_in: newTimestamp })
-            .then(() => {
-              setUser({
-                ...userData,
-                last_logged_in: newTimestamp,
-              });
-            })
-            .catch((err) => {
+          await updateDoc(userDoc, { last_logged_in: newTimestamp }).catch(
+            (err) => {
               console.error("error updating user doc:", err);
-            });
+            }
+          );
         } else {
           const newUser = {
             userId: res.user.uid,
@@ -54,7 +45,6 @@ function Login({ setIsAuth }) {
             last_logged_in: serverTimestamp(),
           };
           console.log("creating new entry:", newUser);
-          setUser(newUser);
           await setDoc(userDoc, newUser);
         }
       })
