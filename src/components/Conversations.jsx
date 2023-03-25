@@ -1,9 +1,13 @@
 import React from "react";
 import SidebarConv from "./SidebarConv";
 
-export default function Conversations({ conversations }) {
+export default function Conversations({
+  conversations,
+  currConv,
+  setCurrConv,
+}) {
   return (
-    <ul>
+    <ul className="conversations">
       {conversations.map((conversation, idx) => (
         <SidebarConv
           id={conversation.conversation_id}
@@ -11,6 +15,8 @@ export default function Conversations({ conversations }) {
           photo={conversation.photo_url}
           timestamp={JSON.stringify(conversation.last_timestamp)}
           key={idx}
+          currConv={currConv}
+          setCurrConv={setCurrConv}
         />
       ))}
     </ul>

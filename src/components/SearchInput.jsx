@@ -1,4 +1,5 @@
 import React from "react";
+import "../styling/Sidebar.css";
 
 export default function SearchInput(props) {
   const { setSearch } = props;

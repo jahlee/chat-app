@@ -2,11 +2,15 @@ import React from "react";
 import Search from "./Search";
 import Conversations from "./Conversations";
 
-export default function Sidebar({ conversations, setCurrConv }) {
+export default function Sidebar({ conversations, currConv, setCurrConv }) {
   return (
-    <div>
+    <div className="sidebar">
       <Search setCurrConv={setCurrConv} />
-      <Conversations conversations={conversations} />
+      <Conversations
+        conversations={conversations}
+        currConv={currConv}
+        setCurrConv={setCurrConv}
+      />
     </div>
   );
 }

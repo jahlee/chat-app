@@ -4,6 +4,7 @@ import { collection, onSnapshot, query, where } from "@firebase/firestore";
 import Conversation from "../components/Conversation";
 import Sidebar from "../components/Sidebar";
 import UserContext from "../context/UserContext";
+import "../styling/Chats.css";
 
 function Chats() {
   const [currConv, setCurrConv] = useState(null);
@@ -41,9 +42,17 @@ function Chats() {
   }, [user]);
 
   return (
-    <div>
-      <Sidebar conversations={conversations} setCurrConv={setCurrConv} />
-      <Conversation conv={currConv} />
+    <div className="chats-container">
+      <div className="sidebar">
+        <Sidebar
+          conversations={conversations}
+          currConv={currConv}
+          setCurrConv={setCurrConv}
+        />
+      </div>
+      <div className="conversation">
+        <Conversation conv={currConv} />
+      </div>
     </div>
   );
 }

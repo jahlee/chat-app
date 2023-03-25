@@ -1,0 +1,37 @@
+.input-search {
+  background-color: #303030;
+  border: none;
+  border-radius: 5px;
+  color: #d0d0d0;
+  font-size: 1.1rem;
+  margin-bottom: 10px;
+  padding: 8px 12px;
+  width: 90%;
+}
+
+.search::placeholder {
+  color: #b0b0b0;
+}
+
+.conversations {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  padding-right: 20px;
+  padding-left: 10px;
+}
+
+.sidebar-conv {
+  cursor: pointer;
+  height: 100px;
+  padding: 2px 10px;
+}
+
+.sidebar-conv.selected {
+  background-color: #303030;
+}
+
+.sidebar-conv:hover {
+  background-color: #444444;
+  border-radius: 10px;
+}
