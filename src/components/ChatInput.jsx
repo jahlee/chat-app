@@ -10,7 +10,6 @@ export default function ChatInput(props) {
 
   function handleChatInputChange(event) {
     setChatInputValue(event.target.value);
-    console.log("changed value to: ", chatInputValue);
   }
 
   function handleEnter(event) {

@@ -18,7 +18,6 @@ import ChatInput from "./ChatInput";
 export default function Conversation({ conv }) {
   const conversation_id = conv ? conv.conversation_id : "";
   const [messages, setMessages] = useState([]);
-  const [loading, setLoading] = useState(false);
   const { user } = useContext(UserContext);
   const firebaseRef = collection(db, "messages");
   const storageRef = ref(storage);
@@ -31,7 +30,6 @@ export default function Conversation({ conv }) {
 
   // load messages + use handler to get messages
   useEffect(() => {
-    setLoading(true);
     // use snapshot for real-time listener
     const unsubscribe = onSnapshot(
       messagesQuery,
@@ -40,8 +38,7 @@ export default function Conversation({ conv }) {
         querySnapshot.forEach((doc) => {
           items.push(doc.data());
         });
-        setMessages(items);
-        setLoading(false);
+        setMessages(items.reverse());
         console.log("messages:", items);
       },
       (err) => {
