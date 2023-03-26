@@ -8,6 +8,7 @@ const UserContext = createContext();
 export function UserProvider({ children }) {
   const [authUser] = useAuthState(auth);
   const isAuth = Boolean(authUser);
+  console.log(isAuth, authUser);
   const user = authUser
     ? {
         userId: authUser.uid,

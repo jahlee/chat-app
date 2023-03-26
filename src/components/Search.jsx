@@ -28,7 +28,7 @@ export default function Search({ setCurrConv }) {
       const newConvRef = doc(convRef);
       const convData = {
         conversation_id: newConvRef.id,
-        last_message: "",
+        last_message: serverTimestamp(),
         last_timestamp: serverTimestamp(),
         participants: [user.userId, "user1"],
         photo_url: "google.com",

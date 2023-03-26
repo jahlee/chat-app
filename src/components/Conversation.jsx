@@ -9,20 +9,24 @@ import {
   query,
   where,
   serverTimestamp,
+  orderBy,
+  limit,
 } from "@firebase/firestore";
 import UserContext from "../context/UserContext";
 import ChatInput from "./ChatInput";
 
 export default function Conversation({ conv }) {
-  const conversation_id = conv ? conv.conversation_id : null;
+  const conversation_id = conv ? conv.conversation_id : "";
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
-  const { user, setUser } = useContext(UserContext);
+  const { user } = useContext(UserContext);
   const firebaseRef = collection(db, "messages");
   const storageRef = ref(storage);
   const messagesQuery = query(
     firebaseRef,
-    where("conversation_id", "==", conversation_id)
+    where("conversation_id", "==", conversation_id),
+    orderBy("timestamp", "desc"),
+    limit(10)
   );
 
   // load messages + use handler to get messages
@@ -36,9 +40,9 @@ export default function Conversation({ conv }) {
         querySnapshot.forEach((doc) => {
           items.push(doc.data());
         });
-        setMessages(items.reverse());
+        setMessages(items);
         setLoading(false);
-        console.log(items);
+        console.log("messages:", items);
       },
       (err) => {
         console.error(err);

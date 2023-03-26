@@ -8,13 +8,10 @@ export default function Conversations({
 }) {
   return (
     <ul className="conversations">
-      {conversations.map((conversation, idx) => (
+      {conversations.map((conversation) => (
         <SidebarConv
-          id={conversation.conversation_id}
-          preview={conversation.last_message}
-          photo={conversation.photo_url}
-          timestamp={JSON.stringify(conversation.last_timestamp)}
-          key={idx}
+          key={conversation.conversation_id}
+          conversation={conversation}
           currConv={currConv}
           setCurrConv={setCurrConv}
         />

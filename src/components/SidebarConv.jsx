@@ -1,25 +1,20 @@
 import React from "react";
 import "../styling/Sidebar.css";
 
-export default function SidebarConv({
-  id,
-  preview,
-  photo,
-  timestamp,
-  currConv,
-  setCurrConv,
-}) {
+export default function SidebarConv({ conversation, currConv, setCurrConv }) {
   const handleSelect = () => {
-    if (currConv !== id) {
-      setCurrConv(id);
+    console.log("clicked on:", conversation);
+    if (currConv !== conversation) {
+      console.log("setting new conversation to:", conversation);
+      setCurrConv(conversation);
     }
   };
   return (
     <li onClick={handleSelect} className="sidebar-conv">
       sidebar conv:
-      <img src={photo} alt="img" />
-      <p>preview: {preview}</p>
-      <p>timestamp: {timestamp}</p>
+      <img src={conversation.photo} alt="img" />
+      <p>preview: {conversation.preview}</p>
+      <p>timestamp: {JSON.stringify(conversation.last_timestamp)}</p>
     </li>
   );
 }

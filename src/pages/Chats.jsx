@@ -1,6 +1,13 @@
 import React, { useContext, useEffect, useState } from "react";
 import { db } from "../firebase-config";
-import { collection, onSnapshot, query, where } from "@firebase/firestore";
+import {
+  collection,
+  limit,
+  onSnapshot,
+  orderBy,
+  query,
+  where,
+} from "@firebase/firestore";
 import Conversation from "../components/Conversation";
 import Sidebar from "../components/Sidebar";
 import UserContext from "../context/UserContext";
@@ -11,13 +18,17 @@ function Chats() {
   const [conversations, setConversations] = useState([]);
   const { user } = useContext(UserContext);
   const convRef = collection(db, "conversations");
-  const conversationsQuery = query(
-    convRef,
-    where("participants", "array-contains", user ? user.userId : null)
-  );
+  console.log("user:", user);
 
   useEffect(() => {
     // get conversations from db
+    const conversationsQuery = query(
+      convRef,
+      where("participants", "array-contains", user ? user.userId : null),
+      orderBy("last_timestamp", "desc"),
+      limit(10)
+    );
+    console.log(user ? user.userId : null, conversationsQuery);
     const unsubscribe = onSnapshot(
       conversationsQuery,
       (querySnapshot) => {
@@ -25,8 +36,8 @@ function Chats() {
         querySnapshot.forEach((doc) => {
           items.push(doc.data());
         });
-        setConversations(items.reverse());
-        console.log(items);
+        setConversations(items);
+        console.log("conversations:", items);
 
         if (items) {
           // set current conv to the most recent conversation
