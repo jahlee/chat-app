@@ -50,7 +50,7 @@ export default function Conversation({ conv }) {
     );
 
     return () => unsubscribe();
-  }, []);
+  }, [conv]);
 
   function sendMessage(message, files) {
     try {
@@ -82,7 +82,12 @@ export default function Conversation({ conv }) {
     } catch (e) {
       console.error(e);
     }
-    console.log("hi");
+    console.log(
+      "sent message:",
+      message,
+      "with conversation id:",
+      conversation_id
+    );
   }
 
   return (
@@ -93,9 +98,7 @@ export default function Conversation({ conv }) {
           <p>{message.text}</p>
         </div>
       ))}
-      <button onClick={() => sendMessage(serverTimestamp(), null)}>
-        Send hi
-      </button>
+      <button onClick={() => sendMessage("message", null)}>Send message</button>
       <ChatInput sendMessage={sendMessage} />
     </>
   );
