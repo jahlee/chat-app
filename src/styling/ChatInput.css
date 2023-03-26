@@ -47,3 +47,53 @@
 .chat-input-file {
   display: none;
 }
+
+.preview {
+  height: 100px;
+  width: 100px;
+}
+
+.input-container {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.file-container {
+  display: flex;
+  flex-direction: row;
+}
+
+.previews-container {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+.preview-container {
+  position: relative;
+}
+
+.remove-preview {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  font-size: 20px;
+  font-weight: bolder;
+  color: black;
+  cursor: pointer;
+}
+
+.remove-preview:hover {
+  color: #ff0000;
+}
+
+.file-error {
+  color: red;
+  font-size: 16px;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
