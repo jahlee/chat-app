@@ -1,10 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
-import { db, storage } from "../firebase-config";
-import { ref } from "firebase/storage";
+import { messagesRef, storage } from "../firebase-config";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import {
   addDoc,
   doc,
-  collection,
   onSnapshot,
   query,
   where,
@@ -19,10 +18,8 @@ export default function Conversation({ conv }) {
   const conversation_id = conv ? conv.conversation_id : "";
   const [messages, setMessages] = useState([]);
   const { user } = useContext(UserContext);
-  const firebaseRef = collection(db, "messages");
-  const storageRef = ref(storage);
   const messagesQuery = query(
-    firebaseRef,
+    messagesRef,
     where("conversation_id", "==", conversation_id),
     orderBy("timestamp", "desc"),
     limit(10)
@@ -51,31 +48,34 @@ export default function Conversation({ conv }) {
 
   function sendMessage(message, files) {
     try {
-      const newDocRef = doc(firebaseRef);
+      let file_urls = [];
       if (files && files.length > 0) {
         // eslint-disable-next-line array-callback-return
         files.map((file) => {
           const timestamp = serverTimestamp()();
-          const fileName = `${timestamp}_${file.name}`;
-          const fileRef = storageRef.child(fileName);
-          fileRef
-            .put(file)
+          const fileName = `messages/${timestamp}_${file.name}`;
+          const fileRef = ref(storage, fileName);
+          uploadBytes(fileRef, file)
             .then(() => {
-              console.log("file uploaded!");
+              console.log("uploading file!");
+              getDownloadURL(fileRef).then((url) => {
+                file_urls.append(url);
+              });
             })
             .catch((err) => {
               console.error(err);
             });
         });
       }
+      const newDocRef = doc(messagesRef);
       const messageData = {
         id: newDocRef.id,
         text: message,
         timestamp: serverTimestamp(),
         conversation_id: conversation_id,
-        image_urls: files,
+        file_urls: file_urls,
       };
-      addDoc(firebaseRef, messageData);
+      addDoc(messagesRef, messageData);
     } catch (e) {
       console.error(e);
     }
@@ -95,7 +95,6 @@ export default function Conversation({ conv }) {
           <p>{message.text}</p>
         </div>
       ))}
-      <button onClick={() => sendMessage("message", null)}>Send message</button>
       <ChatInput sendMessage={sendMessage} />
     </>
   );

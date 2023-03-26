@@ -1,13 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
-import { db } from "../firebase-config";
-import {
-  collection,
-  limit,
-  onSnapshot,
-  orderBy,
-  query,
-  where,
-} from "@firebase/firestore";
+import { convRef } from "../firebase-config";
+import { limit, onSnapshot, orderBy, query, where } from "@firebase/firestore";
 import Conversation from "../components/Conversation";
 import Sidebar from "../components/Sidebar";
 import UserContext from "../context/UserContext";
@@ -17,7 +10,6 @@ function Chats() {
   const [currConv, setCurrConv] = useState(null);
   const [conversations, setConversations] = useState([]);
   const { user } = useContext(UserContext);
-  const convRef = collection(db, "conversations");
   console.log("user:", user);
 
   useEffect(() => {
