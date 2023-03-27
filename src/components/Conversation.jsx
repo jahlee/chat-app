@@ -37,7 +37,7 @@ export default function Conversation({ conv }) {
         querySnapshot.forEach((doc) => {
           items.push(doc.data());
         });
-        setMessages(items.reverse());
+        setMessages(items);
         console.log("messages:", items);
       },
       (err) => {
@@ -177,29 +177,29 @@ export default function Conversation({ conv }) {
 
   function renderMessages() {
     console.log("rendering messages...");
-    messages.map((message) => {
-      const className =
-        message.sender_id === user.userId ? "sent-message" : "receive-message";
-      return (
-        <div key={message.id} className={className}>
-          <p>{message.conversation_id}</p>
-          <p>{message.text}</p>
-          {message.file_urls && renderFiles(message.file_urls)}
-        </div>
-      );
-    });
+    return (
+      <div className="messages-container">
+        {messages.map((message) => {
+          const className =
+            message.sender_id === user.userId
+              ? "sent-message"
+              : "receive-message";
+          return (
+            <div key={message.id} className={className}>
+              <p>{message.conversation_id}</p>
+              <p>{message.text}</p>
+              {message.file_urls && renderFiles(message.file_urls)}
+            </div>
+          );
+        })}
+      </div>
+    );
   }
 
   return (
     <React.Fragment>
-      {messages.map((message) => (
-        <div key={message.id} className="message">
-          <p>{message.conversation_id}</p>
-          <p>{message.text}</p>
-          {message.file_urls && renderFiles(message.file_urls)}
-        </div>
-      ))}
-      <ChatInput sendMessage={sendMessage} />
+      {renderMessages()}
+      <ChatInput sendMessage={sendMessage} className="chat-input-container" />
     </React.Fragment>
   );
 }

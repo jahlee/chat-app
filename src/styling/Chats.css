@@ -24,6 +24,8 @@
   position: fixed;
   background-color: #212121;
   padding: 10px;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Hide the scrollbar initially, but still allow scrolling */
@@ -102,4 +104,37 @@
   color: white;
   cursor: pointer;
   padding: 1rem;
+}
+
+.messages-container {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column-reverse;
+  margin-top: auto;
+}
+
+.sent-message {
+  background-color: #0084ff; /* Messenger blue */
+  color: #fff; /* white text */
+  border-radius: 10px;
+  padding: 10px;
+  margin: 10px;
+  align-self: flex-end;
+  max-width: 60%;
+}
+
+.receive-message {
+  background-color: #f1f0f0; /* light gray */
+  color: #000; /* black text */
+  border-radius: 10px;
+  padding: 10px;
+  margin: 10px;
+  align-self: flex-end;
+  max-width: 60%;
+}
+
+.chat-input-container {
+  margin-top: auto;
+  max-height: 100px;
 }
