@@ -1,10 +1,4 @@
-import {
-  addDoc,
-  collection,
-  doc,
-  serverTimestamp,
-  setDoc,
-} from "firebase/firestore";
+import { collection, doc, serverTimestamp, setDoc } from "firebase/firestore";
 import React, { useContext, useState } from "react";
 import UserContext from "../context/UserContext";
 import { db } from "../firebase-config";

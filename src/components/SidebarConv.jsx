@@ -1,12 +1,4 @@
-import {
-  collection,
-  deleteDoc,
-  doc,
-  getDoc,
-  getDocs,
-  query,
-  where,
-} from "firebase/firestore";
+import { deleteDoc, doc, getDocs, query, where } from "firebase/firestore";
 import { deleteObject, ref } from "firebase/storage";
 import React, { useContext, useEffect, useState } from "react";
 import UserContext from "../context/UserContext";
