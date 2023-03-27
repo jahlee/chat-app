@@ -1,4 +1,10 @@
-import { addDoc, collection, doc, serverTimestamp } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  doc,
+  serverTimestamp,
+  setDoc,
+} from "firebase/firestore";
 import React, { useContext, useState } from "react";
 import UserContext from "../context/UserContext";
 import { db } from "../firebase-config";
@@ -20,7 +26,7 @@ export default function Search({ setCurrConv }) {
     }, 500);
   }
 
-  function createNewConversation() {
+  async function createNewConversation() {
     // TODO: only create new conversation if it doesn't exist yet
     // TODO: have other user's id as input to this function
     // TODO: set photo_url to their profile pic(?)
@@ -28,15 +34,15 @@ export default function Search({ setCurrConv }) {
       const newConvRef = doc(convRef);
       const convData = {
         conversation_id: newConvRef.id,
-        last_message: serverTimestamp(),
-        last_timestamp: serverTimestamp(),
         participants: [user.userId, "user1"],
         photo_url: "google.com",
+        last_message: "",
+        last_timestamp: serverTimestamp(),
       };
-      addDoc(convRef, convData);
+      await setDoc(newConvRef, convData);
       console.log("successfully created new conversation with data:", convData);
     } catch (e) {
-      console.error(e);
+      console.error(e.toString());
     }
   }
 

@@ -78,10 +78,11 @@ export default function Conversation({ conv }) {
       const newDocRef = doc(messagesRef);
       const messageData = {
         id: newDocRef.id,
-        text: message,
-        timestamp: serverTimestamp(),
         conversation_id: conversation_id,
+        sender_id: user.userId,
+        text: message,
         file_urls: file_urls,
+        timestamp: serverTimestamp(),
       };
       await addDoc(messagesRef, messageData);
     } catch (e) {
@@ -174,8 +175,23 @@ export default function Conversation({ conv }) {
     );
   }
 
+  function renderMessages() {
+    console.log("rendering messages...");
+    messages.map((message) => {
+      const className =
+        message.sender_id === user.userId ? "sent-message" : "receive-message";
+      return (
+        <div key={message.id} className={className}>
+          <p>{message.conversation_id}</p>
+          <p>{message.text}</p>
+          {message.file_urls && renderFiles(message.file_urls)}
+        </div>
+      );
+    });
+  }
+
   return (
-    <>
+    <React.Fragment>
       {messages.map((message) => (
         <div key={message.id} className="message">
           <p>{message.conversation_id}</p>
@@ -184,6 +200,6 @@ export default function Conversation({ conv }) {
         </div>
       ))}
       <ChatInput sendMessage={sendMessage} />
-    </>
+    </React.Fragment>
   );
 }
