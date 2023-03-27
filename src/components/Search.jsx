@@ -41,10 +41,10 @@ export default function Search({ setCurrConv }) {
   }
 
   return (
-    <div>
+    <React.Fragment>
       <SearchInput setSearch={handleSearchChange} />
       <button onClick={createNewConversation}>+</button>
       <SearchDropdown search={search} setCurrConv={setCurrConv} />
-    </div>
+    </React.Fragment>
   );
 }

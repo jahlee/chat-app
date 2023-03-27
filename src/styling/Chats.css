@@ -2,58 +2,26 @@
   display: flex;
   background-color: #121212;
   color: #fff;
-  overflow: hidden;
+  height: calc(100vh - 44px);
 }
 
 .sidebar {
-  width: calc(30% - 10px);
-  background-color: #121212;
-  padding: 0px 0px 50px 10px;
-  color: white;
+  width: 30%;
   height: 100%;
-  overflow: auto;
-  position: fixed;
-  overflow: scroll;
+  background-color: #121212;
+  color: white;
+  display: flex;
+  position: relative;
+  flex-direction: column;
 }
 
 .conversation {
   width: 70%;
-  margin-left: 30%;
   height: 100%;
-  overflow: auto;
-  position: fixed;
+  flex-grow: 1;
   background-color: #212121;
-  padding: 10px;
   display: flex;
   flex-direction: column;
-}
-
-/* Hide the scrollbar initially, but still allow scrolling */
-.sidebar::-webkit-scrollbar {
-  width: 10px;
-}
-
-.sidebar::-webkit-scrollbar-thumb {
-  border-radius: 10px;
-}
-
-/* Handle on hover */
-.sidebar::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(136, 136, 136, 0.7);
-  border-radius: 10px;
-}
-
-.sidebar::-webkit-scrollbar-thumb:active {
-  background-color: rgba(136, 136, 136, 1);
-}
-
-/* Show scrollbar on hover or scroll */
-.sidebar::-webkit-scrollbar-track:hover {
-  background-color: rgba(0, 0, 0, 0.15);
-}
-
-.message {
-  max-width: 40%;
 }
 
 .image {

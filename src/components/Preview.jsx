@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { collection, doc, deleteDoc, getDocs } from "firebase/firestore";
 import { db } from "../firebase-config";
+import { RecaptchaVerifier } from "firebase/auth";
 
 function Preview() {
   const [messagesList, setMessagesList] = useState([]);
@@ -25,11 +26,11 @@ function Preview() {
   return (
     <div>
       {messagesList.map((message) => (
-        <>
+        <React.Fragment>
           <div className="picture">{message.picture}</div>
           <div className="preview">{message.preview}</div>
           <button onClick={() => deleteMessage(message.id)}>Delete</button>
-        </>
+        </React.Fragment>
       ))}
     </div>
   );
