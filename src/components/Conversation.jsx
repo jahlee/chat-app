@@ -24,7 +24,6 @@ export default function Conversation({ conv }) {
     orderBy("timestamp", "desc"),
     limit(10)
   );
-
   // load messages + use handler to get messages
   useEffect(() => {
     // use snapshot for real-time listener
@@ -46,26 +45,22 @@ export default function Conversation({ conv }) {
     return () => unsubscribe();
   }, [conv]);
 
-  function sendMessage(message, files) {
+  async function sendMessage(message, files) {
     try {
       let file_urls = [];
       if (files && files.length > 0) {
         // eslint-disable-next-line array-callback-return
-        files.map((file) => {
-          const timestamp = serverTimestamp()();
-          const fileName = `messages/${timestamp}_${file.name}`;
-          const fileRef = ref(storage, fileName);
-          uploadBytes(fileRef, file)
-            .then(() => {
-              console.log("uploading file!");
-              getDownloadURL(fileRef).then((url) => {
-                file_urls.append(url);
-              });
-            })
-            .catch((err) => {
-              console.error(err);
-            });
-        });
+        await Promise.all(
+          Array.from(files).map(async (file) => {
+            const fileName = `messages/${file.name}`;
+            const fileRef = ref(storage, fileName);
+            await uploadBytes(fileRef, file);
+            console.log("uploaded file!");
+            const url = await getDownloadURL(fileRef);
+            console.log("url:", url);
+            file_urls.push(url);
+          })
+        );
       }
       const newDocRef = doc(messagesRef);
       const messageData = {
@@ -75,15 +70,34 @@ export default function Conversation({ conv }) {
         conversation_id: conversation_id,
         file_urls: file_urls,
       };
-      addDoc(messagesRef, messageData);
+      await addDoc(messagesRef, messageData);
     } catch (e) {
       console.error(e);
     }
     console.log(
       "sent message:",
       message,
+      "and file(s):",
+      files,
       "with conversation id:",
       conversation_id
+    );
+  }
+
+  function renderFiles(file_urls) {
+    return (
+      <div className="files-container">
+        {file_urls.map((url) => {
+          const fileRef = ref(storage, url);
+          console.log(url);
+          console.log(fileRef);
+          return (
+            <div className="file-container" key={url}>
+              <img src={url} alt={fileRef ? fileRef.name : ""} />
+            </div>
+          );
+        })}
+      </div>
     );
   }
 
@@ -93,6 +107,7 @@ export default function Conversation({ conv }) {
         <div key={message.id}>
           <p>{message.conversation_id}</p>
           <p>{message.text}</p>
+          {message.file_urls && renderFiles(message.file_urls)}
         </div>
       ))}
       <ChatInput sendMessage={sendMessage} />

@@ -104,10 +104,11 @@ export default function ChatInput(props) {
       sendMessage(chatInputValue, files);
       console.log(chatInputValue, "sent");
       setChatInputValue("");
-      setFiles(null);
+      setFiles([]);
       for (const urlObj of previewURLs) {
         URL.revokeObjectURL(urlObj.url);
       }
+      setPreviewURLs([]);
     }
   }
 
