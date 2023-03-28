@@ -99,17 +99,17 @@ export default function SidebarConv({ conversation, currConv, setCurrConv }) {
       onMouseLeave={handleMouseLeave}
     >
       {showDel && (
-        <button className="delete" onClick={handleDelete}>
+        <button className="delete-button" onClick={handleDelete}>
           X
         </button>
       )}
       {showConfirm && (
-        <div className="confirm-delete">
-          <div className="delete-message">
-            Are you sure you want to delete this conversation?
+        <div id="myModal" class="modal">
+          <div class="modal-content">
+            <p>Are you sure you want to delete this conversation?</p>
+            <button id="confirmDelete">Yes, delete</button>
+            <button id="cancelDelete">Cancel</button>
           </div>
-          <button onClick={deleteConversation}>Yes</button>
-          <button onClick={handleAbort}>No</button>
         </div>
       )}
       <img src={conversation.photo_url} alt="img" />

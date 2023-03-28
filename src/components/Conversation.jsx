@@ -16,10 +16,13 @@ import { faFile } from "@fortawesome/free-regular-svg-icons";
 import UserContext from "../context/UserContext";
 import ChatInput from "./ChatInput";
 import "../styling/Chats.css";
+import Modal from "./Modal";
 
 export default function Conversation({ conv }) {
   const conversation_id = conv ? conv.conversation_id : "";
   const [messages, setMessages] = useState([]);
+  const [imageOpened, setImageOpened] = useState(false);
+  const [openImageURL, setOpenImageURL] = useState("");
   const { user } = useContext(UserContext);
   const messagesQuery = query(
     messagesRef,
@@ -47,6 +50,10 @@ export default function Conversation({ conv }) {
 
     return () => unsubscribe();
   }, [conv]);
+
+  useEffect(() => {
+    console.log("imageOpened:", imageOpened);
+  }, [imageOpened]);
 
   async function sendMessage(message, files) {
     try {
@@ -102,50 +109,15 @@ export default function Conversation({ conv }) {
     window.open(url, "_blank");
   }
 
+  function closeImage() {
+    setImageOpened(false);
+    setOpenImageURL("");
+  }
+
   function openImage(url) {
-    // Create the modal container
-    const modal = document.createElement("div");
-    modal.classList.add("modal");
-
-    // Create the image element
-    const img = document.createElement("img");
-    img.src = url;
-    img.classList.add("modal-content");
-
-    // Create the close button element
-    const span = document.createElement("span");
-    span.classList.add("close");
-    span.innerHTML = "&times;";
-
-    // Define the click handler for the close button
-    span.onclick = () => modal.remove();
-
-    // Append the image and close button elements to the modal container
-    modal.appendChild(span);
-    modal.appendChild(img);
-
-    // Append the modal container to the document body
-    document.body.appendChild(modal);
-
-    // Define the click handler for clicks outside of the modal
-    const handleClickOutside = (event) => {
-      if (event.target === modal) {
-        modal.remove();
-        window.removeEventListener("click", handleClickOutside);
-      }
-    };
-
-    // Define the keydown handler for the escape key
-    const handleKeyDown = (event) => {
-      if (event.key === "Escape") {
-        modal.remove();
-        window.removeEventListener("keydown", handleKeyDown);
-      }
-    };
-
-    // Add event listeners for clicks outside of the modal and for the escape key
-    window.addEventListener("click", handleClickOutside);
-    window.addEventListener("keydown", handleKeyDown);
+    setImageOpened(true);
+    setOpenImageURL(url);
+    console.log(url, "being opened");
   }
 
   function renderFiles(file_urls) {
@@ -154,8 +126,6 @@ export default function Conversation({ conv }) {
         {file_urls.map((urlObj) => {
           const { url, type } = urlObj;
           const fileRef = ref(storage, url);
-          console.log(url);
-          console.log(fileRef);
           return type === "image" ? (
             <img
               key={url}
@@ -176,7 +146,6 @@ export default function Conversation({ conv }) {
   }
 
   function renderMessages() {
-    console.log("rendering messages...");
     return (
       <div className="messages-container">
         {messages.map((message) => {
@@ -198,6 +167,16 @@ export default function Conversation({ conv }) {
 
   return (
     <React.Fragment>
+      {imageOpened && (
+        <Modal onClose={closeImage}>
+          <img
+            src={openImageURL}
+            alt={openImageURL}
+            onClick={(e) => e.stopPropagation()}
+            className="modal-image"
+          />
+        </Modal>
+      )}
       {renderMessages()}
       <ChatInput sendMessage={sendMessage} className="chat-input-container" />
     </React.Fragment>

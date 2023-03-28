@@ -69,6 +69,7 @@
   cursor: pointer;
   height: 100px;
   padding: 2px 10px;
+  position: relative;
 }
 
 .sidebar-conv.selected {
@@ -78,4 +79,20 @@
 .sidebar-conv:hover {
   background-color: #444444;
   border-radius: 10px;
+}
+
+.delete-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: transparent;
+  color: red;
+  font-weight: bold;
+  border: none;
+  font-size: 20px;
+}
+
+.delete-button:hover {
+  color: lightcoral;
+  cursor: pointer;
 }
