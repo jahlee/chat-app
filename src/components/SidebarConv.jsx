@@ -2,8 +2,15 @@ import { deleteDoc, doc, getDocs, query, where } from "firebase/firestore";
 import { deleteObject, ref } from "firebase/storage";
 import React, { useContext, useEffect, useState } from "react";
 import UserContext from "../context/UserContext";
-import { convRef, db, messagesRef, storage } from "../firebase-config";
+import {
+  convRef,
+  db,
+  filesRef,
+  messagesRef,
+  storage,
+} from "../firebase-config";
 import "../styling/Sidebar.css";
+import Modal from "./Modal";
 
 export default function SidebarConv({ conversation, currConv, setCurrConv }) {
   const [showDel, setShowDel] = useState(false);
@@ -38,12 +45,16 @@ export default function SidebarConv({ conversation, currConv, setCurrConv }) {
       const deletePromises = messagesSnapshot.docs.map(async (messageDoc) => {
         const messageData = messageDoc.data();
         console.log("message:", messageData);
-        // delete each object storage in the file_urls array
-        const deleteFilePromises = messageData.file_urls.map(
-          async (fileUrl) => {
-            const fileRef = ref(storage, fileUrl.url);
-            await deleteObject(fileRef);
-            console.log("Object storage deleted:", fileUrl);
+        // delete each object storage + file doc in the file_refs array
+        const deleteFilePromises = messageData.file_refs.map(
+          async (fileRefObj) => {
+            const { url, id } = fileRefObj;
+            const storageRef = ref(storage, url);
+            console.log("deleting object storage:", storageRef);
+            await deleteObject(storageRef);
+
+            const fileDocRef = doc(filesRef, id);
+            await deleteDoc(fileDocRef);
           }
         );
         await Promise.all(deleteFilePromises);
@@ -54,11 +65,8 @@ export default function SidebarConv({ conversation, currConv, setCurrConv }) {
         console.log("Message deleted:", messageDoc.id);
       });
       await Promise.all(deletePromises);
-      console.log("going to delete conv now");
+
       // delete the conversation document
-      // const convDocRef = await getDoc(
-      //   query(convRef, where("conversation_id", "==", convId))
-      // );
       const convDocRef = doc(convRef, convId);
       await deleteDoc(convDocRef);
       console.log("Conversation deleted:", convId);
@@ -104,13 +112,17 @@ export default function SidebarConv({ conversation, currConv, setCurrConv }) {
         </button>
       )}
       {showConfirm && (
-        <div id="myModal" class="modal">
-          <div class="modal-content">
+        <Modal onClose={handleAbort}>
+          <div class="modal-delete">
             <p>Are you sure you want to delete this conversation?</p>
-            <button id="confirmDelete">Yes, delete</button>
-            <button id="cancelDelete">Cancel</button>
+            <button id="confirmDelete" onClick={deleteConversation}>
+              Yes, delete
+            </button>
+            <button id="cancelDelete" onClick={handleAbort}>
+              Cancel
+            </button>
           </div>
-        </div>
+        </Modal>
       )}
       <img src={conversation.photo_url} alt="img" />
       <p>preview: {conversation.preview}</p>

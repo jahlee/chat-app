@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { messagesRef, storage } from "../firebase-config";
+import { filesRef, messagesRef, storage } from "../firebase-config";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import {
   addDoc,
@@ -10,7 +10,9 @@ import {
   serverTimestamp,
   orderBy,
   limit,
+  getDoc,
 } from "@firebase/firestore";
+import { v4 as uuidv4 } from "uuid";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFile } from "@fortawesome/free-regular-svg-icons";
 import UserContext from "../context/UserContext";
@@ -23,6 +25,7 @@ export default function Conversation({ conv }) {
   const [messages, setMessages] = useState([]);
   const [imageOpened, setImageOpened] = useState(false);
   const [openImageURL, setOpenImageURL] = useState("");
+  const [filesToRender, setFilesToRender] = useState([]);
   const { user } = useContext(UserContext);
   const messagesQuery = query(
     messagesRef,
@@ -51,44 +54,67 @@ export default function Conversation({ conv }) {
     return () => unsubscribe();
   }, [conv]);
 
+  useEffect(() => {}, [filesToRender]);
+
   useEffect(() => {
     console.log("imageOpened:", imageOpened);
   }, [imageOpened]);
 
   async function sendMessage(message, files) {
     try {
-      const image_urls = [];
-      const pdf_urls = [];
+      const image_refs = [];
+      const pdf_refs = [];
       if (files && files.length > 0) {
         // eslint-disable-next-line array-callback-return
         await Promise.all(
           Array.from(files).map(async (file) => {
-            const fileName = `messages/${file.name}`;
-            const fileRef = ref(storage, fileName);
-            const isImage = file.type.includes("image");
+            const uuid = uuidv4();
+            const fileName = file.name;
+            const storageName = `messages/${uuid}`;
+            const fileRef = ref(storage, storageName);
+            const type = file.type.includes("image") ? "image" : "pdf";
+
             await uploadBytes(fileRef, file);
             console.log("uploaded file!");
-            const urlObj = {
-              url: await getDownloadURL(fileRef),
-              type: isImage ? "image" : "pdf",
+
+            const fileURL = await getDownloadURL(fileRef);
+
+            // upload file metadata
+            const fileObj = {
+              uuid: uuid,
+              file_name: fileName,
+              storage_name: storageName,
+              file_url: fileURL,
+              file_type: type,
+              user_id: user.userId,
+              conv_id: conversation_id,
+              upload_time: serverTimestamp(),
             };
-            console.log("url:", urlObj);
-            if (isImage) {
-              image_urls.push(urlObj);
+            const newFileRef = await addDoc(filesRef, fileObj);
+            console.log(newFileRef);
+
+            const newFileRefObj = {
+              id: newFileRef.id,
+              url: fileURL,
+              type: type,
+            };
+
+            if (type === "image") {
+              image_refs.push(newFileRefObj);
             } else {
-              pdf_urls.push(urlObj);
+              pdf_refs.push(newFileRefObj);
             }
           })
         );
       }
-      const file_urls = [...pdf_urls, ...image_urls];
+      const file_refs = [...pdf_refs, ...image_refs];
       const newDocRef = doc(messagesRef);
       const messageData = {
         id: newDocRef.id,
         conversation_id: conversation_id,
         sender_id: user.userId,
         text: message,
-        file_urls: file_urls,
+        file_refs: file_refs,
         timestamp: serverTimestamp(),
       };
       await addDoc(messagesRef, messageData);
@@ -120,11 +146,11 @@ export default function Conversation({ conv }) {
     console.log(url, "being opened");
   }
 
-  function renderFiles(file_urls) {
+  function renderFiles(file_refs) {
     return (
       <div className="files-container">
-        {file_urls.map((urlObj) => {
-          const { url, type } = urlObj;
+        {file_refs.map((refObj) => {
+          const { url, type } = refObj;
           const fileRef = ref(storage, url);
           return type === "image" ? (
             <img
@@ -157,7 +183,7 @@ export default function Conversation({ conv }) {
             <div key={message.id} className={className}>
               <p>{message.conversation_id}</p>
               <p>{message.text}</p>
-              {message.file_urls && renderFiles(message.file_urls)}
+              {message.file_refs && renderFiles(message.file_refs)}
             </div>
           );
         })}

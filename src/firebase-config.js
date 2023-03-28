@@ -31,6 +31,7 @@ export const auth = getAuth(app);
 export const convRef = collection(db, "conversations");
 export const messagesRef = collection(db, "messages");
 export const usersRef = collection(db, "users");
+export const filesRef = collection(db, "files");
 export const googleProvider = new GoogleAuthProvider();
 export const facebookProvider = new FacebookAuthProvider();
 export const analytics = getAnalytics(app);
