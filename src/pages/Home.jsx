@@ -42,7 +42,7 @@ function Home() {
         </section>
         <section id="features">
           <h2>Features</h2>
-          <ul>
+          <ul className="feature-list">
             <li>Create a profile</li>
             <li>Chat with friends</li>
             <li>Real-time messaging</li>

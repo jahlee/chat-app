@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { filesRef, messagesRef, storage } from "../firebase-config";
+import { convRef, filesRef, messagesRef, storage } from "../firebase-config";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import {
   addDoc,
@@ -10,7 +10,7 @@ import {
   serverTimestamp,
   orderBy,
   limit,
-  getDoc,
+  updateDoc,
 } from "@firebase/firestore";
 import { v4 as uuidv4 } from "uuid";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -25,7 +25,6 @@ export default function Conversation({ conv }) {
   const [messages, setMessages] = useState([]);
   const [imageOpened, setImageOpened] = useState(false);
   const [openImageURL, setOpenImageURL] = useState("");
-  const [filesToRender, setFilesToRender] = useState([]);
   const { user } = useContext(UserContext);
   const messagesQuery = query(
     messagesRef,
@@ -53,8 +52,6 @@ export default function Conversation({ conv }) {
 
     return () => unsubscribe();
   }, [conv]);
-
-  useEffect(() => {}, [filesToRender]);
 
   useEffect(() => {
     console.log("imageOpened:", imageOpened);
@@ -118,6 +115,17 @@ export default function Conversation({ conv }) {
         timestamp: serverTimestamp(),
       };
       await addDoc(messagesRef, messageData);
+
+      // update conversation with last_message and last_timestamp
+      const convDoc = doc(convRef, conversation_id);
+      const last_message =
+        files && files.length > 0
+          ? `${files.length} files were added`
+          : message;
+      await updateDoc(convDoc, {
+        last_message: last_message,
+        last_timestamp: serverTimestamp(),
+      });
     } catch (e) {
       console.error(e);
     }

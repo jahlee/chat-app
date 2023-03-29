@@ -70,7 +70,7 @@
   text-align: left;
 }
 
-li::before {
+.feature-list > li::before {
   content: "\2192 "; /* right arrow symbol */
   color: #999; /* arrow color */
   margin-right: 0.5em; /* space between arrow and text */

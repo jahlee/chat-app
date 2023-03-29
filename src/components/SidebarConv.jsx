@@ -2,13 +2,7 @@ import { deleteDoc, doc, getDocs, query, where } from "firebase/firestore";
 import { deleteObject, ref } from "firebase/storage";
 import React, { useContext, useEffect, useState } from "react";
 import UserContext from "../context/UserContext";
-import {
-  convRef,
-  db,
-  filesRef,
-  messagesRef,
-  storage,
-} from "../firebase-config";
+import { convRef, filesRef, messagesRef, storage } from "../firebase-config";
 import "../styling/Sidebar.css";
 import Modal from "./Modal";
 
@@ -125,7 +119,7 @@ export default function SidebarConv({ conversation, currConv, setCurrConv }) {
         </Modal>
       )}
       <img src={conversation.photo_url} alt="img" />
-      <p>preview: {conversation.preview}</p>
+      <p>preview: {conversation.last_message}</p>
     </li>
   );
 }
