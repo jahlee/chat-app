@@ -50,11 +50,11 @@ export default function Search({ setCurrConv }) {
   }
 
   function handleSearchBlur() {
-    // wait 100ms to allow setCurrConv to propogate
+    // wait 200ms to allow setCurrConv to propogate
     clearTimeout(timeoutId);
     timeoutId = setTimeout(() => {
       setSearchSelected(false);
-    }, 100);
+    }, 200);
   }
 
   return (

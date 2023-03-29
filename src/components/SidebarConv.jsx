@@ -10,10 +10,10 @@ export default function SidebarConv({ conversation, currConv, setCurrConv }) {
   const [showDel, setShowDel] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const { user } = useContext(UserContext);
-
-  useEffect(() => {
-    console.log("curr conv:", currConv);
-  }, [currConv]);
+  let className = "sidebar-conv";
+  if (currConv && currConv.conversation_id === conversation.conversation_id) {
+    className += " selected-conv";
+  }
 
   const handleSelect = () => {
     console.log("clicked on:", conversation);
@@ -96,7 +96,7 @@ export default function SidebarConv({ conversation, currConv, setCurrConv }) {
   return (
     <li
       onClick={handleSelect}
-      className="sidebar-conv"
+      className={className}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >

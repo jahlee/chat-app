@@ -56,15 +56,15 @@
   padding: 2px 10px;
   position: relative;
   list-style-type: none;
+  border-radius: 10px;
 }
 
-.sidebar-conv.selected {
+.selected-conv {
   background-color: #303030;
 }
 
 .sidebar-conv:hover {
   background-color: #444444;
-  border-radius: 10px;
 }
 
 .delete-button {
