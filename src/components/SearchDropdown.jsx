@@ -4,10 +4,14 @@ import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../firebase-config";
 import "../styling/Search.css";
 
-export default function SearchDropdown(props) {
-  const { search, setCurrConv } = props;
+export default function SearchDropdown({
+  search,
+  setCurrConv,
+  searchSelected,
+}) {
+  const [entryClicked, setEntryClicked] = useState(false);
   const [users, setUsers] = useState([]);
-  const [selectedUser, setSelectedUser] = useState(null);
+  const [selectedUser, setSelectedUser] = useState(searchSelected);
 
   useEffect(() => {
     console.log("current users for search", search, "is:", users);
@@ -36,8 +40,13 @@ export default function SearchDropdown(props) {
     console.log("selectedUser changed to:", selectedUser);
   }, [selectedUser]);
 
+  // if (!searchSelected && !entryClicked) {
+  //   return null;
+  // }
+
   const handleSelect = () => {
     setCurrConv(selectedUser);
+    setEntryClicked(false);
   };
 
   const handleHoveredUser = (usr) => {

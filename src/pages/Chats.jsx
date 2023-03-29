@@ -23,6 +23,10 @@ function Chats() {
   }, [isAuth]);
 
   useEffect(() => {
+    console.log("currconv changed!", currConv);
+  }, [currConv]);
+
+  useEffect(() => {
     // get conversations from db
     const conversationsQuery = query(
       convRef,

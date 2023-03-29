@@ -45,18 +45,34 @@ export default function Search({ setCurrConv }) {
       console.error(e.toString());
     }
   }
+  function handleSearchFocus() {
+    setSearchSelected(true);
+  }
+
+  function handleSearchBlur() {
+    // wait 100ms to allow setCurrConv to propogate
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => {
+      setSearchSelected(false);
+    }, 100);
+  }
 
   return (
-    <div className="search-content">
-      <SearchInput
-        setSearch={handleSearchChange}
-        setSearchSelected={setSearchSelected}
-      />
+    <div
+      className="search-content"
+      onFocus={handleSearchFocus}
+      onBlur={handleSearchBlur}
+    >
+      <SearchInput setSearch={handleSearchChange} />
       <button onClick={createNewConversation} className="create-conv-button">
         +
       </button>
       {searchSelected && (
-        <SearchDropdown search={search} setCurrConv={setCurrConv} />
+        <SearchDropdown
+          search={search}
+          setCurrConv={setCurrConv}
+          searchSelected={searchSelected}
+        />
       )}
     </div>
   );
