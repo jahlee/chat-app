@@ -9,7 +9,6 @@ export default function SearchEntry(props) {
     : "user-dropdown";
 
   const handleSelect = () => {
-    console.log("clicking!", user);
     onSelect();
   };
   const handleHover = () => {

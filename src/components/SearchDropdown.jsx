@@ -9,7 +9,6 @@ export default function SearchDropdown({
   setCurrConv,
   searchSelected,
 }) {
-  const [entryClicked, setEntryClicked] = useState(false);
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(searchSelected);
 
@@ -40,13 +39,8 @@ export default function SearchDropdown({
     console.log("selectedUser changed to:", selectedUser);
   }, [selectedUser]);
 
-  // if (!searchSelected && !entryClicked) {
-  //   return null;
-  // }
-
   const handleSelect = () => {
     setCurrConv(selectedUser);
-    setEntryClicked(false);
   };
 
   const handleHoveredUser = (usr) => {
