@@ -1,6 +1,16 @@
 import React, { useContext, useEffect, useState } from "react";
 import { convRef } from "../firebase-config";
-import { limit, onSnapshot, orderBy, query, where } from "@firebase/firestore";
+import {
+  doc,
+  getDocs,
+  limit,
+  onSnapshot,
+  orderBy,
+  query,
+  serverTimestamp,
+  setDoc,
+  where,
+} from "@firebase/firestore";
 import Conversation from "../components/Conversation";
 import Sidebar from "../components/Sidebar";
 import UserContext from "../context/UserContext";
@@ -11,6 +21,7 @@ function Chats() {
   const [currConv, setCurrConv] = useState(null);
   const [conversations, setConversations] = useState([]);
   const { user, isAuth } = useContext(UserContext);
+  const userId = user ? user.userId : "";
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -30,11 +41,12 @@ function Chats() {
     // get conversations from db
     const conversationsQuery = query(
       convRef,
-      where("participants", "array-contains", user ? user.userId : null),
+      where("participants", "array-contains", userId),
       orderBy("last_timestamp", "desc"),
       limit(10)
     );
-    console.log(user ? user.userId : null, conversationsQuery);
+
+    console.log(userId, conversationsQuery);
     const unsubscribe = onSnapshot(
       conversationsQuery,
       (querySnapshot) => {
@@ -58,6 +70,44 @@ function Chats() {
     return () => unsubscribe();
   }, [user]);
 
+  const setConversationByUser = async (usr) => {
+    // where("participants", "==", [id1, id2])
+    let newConversation = {};
+    const usr_id = usr.userId;
+    const newConversationQuery = query(
+      convRef,
+      where(`participants.${userId}`, "==", true),
+      where(`participants.${usr_id}`, "==", true),
+      limit(1)
+    );
+    const querySnapshot = await getDocs(newConversationQuery);
+
+    // no current conversation, create new conversation
+    if (querySnapshot.empty) {
+      try {
+        const newConvRef = doc(convRef);
+        newConversation = {
+          conversation_id: newConvRef.id,
+          participants: [userId, usr_id].sort(),
+          participants_obj: { userId: true, usr_id: true },
+          photo_url: user.photo_url,
+          last_message: "",
+          last_timestamp: serverTimestamp(),
+        };
+        await setDoc(newConvRef, newConversation);
+        console.log(
+          "successfully created new conversation with data:",
+          newConversation
+        );
+      } catch (e) {
+        console.error(e.toString());
+      }
+    } else {
+      newConversation = querySnapshot.docs[0].data();
+    }
+    setCurrConv(newConversation);
+  };
+
   if (!isAuth) {
     return null;
   }
@@ -69,6 +119,7 @@ function Chats() {
           conversations={conversations}
           currConv={currConv}
           setCurrConv={setCurrConv}
+          setConvByUser={setConversationByUser}
         />
       </div>
       <div className="conversation">

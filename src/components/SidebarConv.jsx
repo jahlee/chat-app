@@ -118,8 +118,8 @@ export default function SidebarConv({ conversation, currConv, setCurrConv }) {
           </div>
         </Modal>
       )}
-      <img src={conversation.photo_url} alt="img" />
-      <p>preview: {conversation.last_message}</p>
+      <img src={conversation.photo_url} alt="img" className="sidebar-profile" />
+      <p className="sidebar-name">{conversation.last_message}...</p>
     </li>
   );
 }

@@ -6,7 +6,7 @@ import "../styling/Search.css";
 
 export default function SearchDropdown({
   search,
-  setCurrConv,
+  handleSelectedUser,
   searchSelected,
 }) {
   const [users, setUsers] = useState([]);
@@ -40,7 +40,7 @@ export default function SearchDropdown({
   }, [selectedUser]);
 
   const handleSelect = () => {
-    setCurrConv(selectedUser);
+    handleSelectedUser(selectedUser);
   };
 
   const handleHoveredUser = (usr) => {

@@ -3,11 +3,16 @@ import Search from "./Search";
 import Conversations from "./Conversations";
 import "../styling/Sidebar.css";
 
-export default function Sidebar({ conversations, currConv, setCurrConv }) {
+export default function Sidebar({
+  conversations,
+  currConv,
+  setCurrConv,
+  setConvByUser,
+}) {
   return (
     <div className="sidebar-content">
       <div className="search-container">
-        <Search setCurrConv={setCurrConv} />
+        <Search setConvByUser={setConvByUser} />
       </div>
       <div className="conversations-container">
         <Conversations

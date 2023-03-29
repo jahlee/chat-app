@@ -6,10 +6,11 @@ import SearchDropdown from "./SearchDropdown";
 import SearchInput from "./SearchInput";
 import "../styling/Search.css";
 
-export default function Search({ setCurrConv }) {
+export default function Search({ setConvByUser }) {
   const [search, setSearch] = useState("");
   const [searchSelected, setSearchSelected] = useState(false);
   const { user } = useContext(UserContext);
+  const userId = user ? user.userId : "";
   const convRef = collection(db, "conversations");
   let timeoutId;
 
@@ -34,7 +35,8 @@ export default function Search({ setCurrConv }) {
       const newConvRef = doc(convRef);
       const convData = {
         conversation_id: newConvRef.id,
-        participants: [user.userId, "user1"],
+        participants: [user.userId, "user1"].sort(),
+        participants_obj: { userId: true, user1: true },
         photo_url: "google.com",
         last_message: "",
         last_timestamp: serverTimestamp(),
@@ -50,11 +52,15 @@ export default function Search({ setCurrConv }) {
   }
 
   function handleSearchBlur() {
-    // wait 200ms to allow setCurrConv to propogate
+    // wait 200ms to allow setConvByUser to propogate
     clearTimeout(timeoutId);
     timeoutId = setTimeout(() => {
       setSearchSelected(false);
     }, 200);
+  }
+
+  function handleSelectedUser(usr) {
+    setConvByUser(usr);
   }
 
   return (
@@ -70,7 +76,7 @@ export default function Search({ setCurrConv }) {
       {searchSelected && (
         <SearchDropdown
           search={search}
-          setCurrConv={setCurrConv}
+          handleSelectedUser={handleSelectedUser}
           searchSelected={searchSelected}
         />
       )}

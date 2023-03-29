@@ -59,6 +59,22 @@
   border-radius: 10px;
 }
 
+.sidebar-profile {
+  width: 75px;
+  height: 75px;
+  border-radius: 50%;
+  object-fit: cover;
+  float: left;
+  margin-right: 10px;
+}
+
+.sidebar-name {
+  margin: 0;
+  display: inline-block;
+  vertical-align: middle;
+  line-height: 75px;
+}
+
 .selected-conv {
   background-color: #303030;
 }
