@@ -40,6 +40,7 @@ function Login() {
           const newUser = {
             userId: res.user.uid,
             name: res.user.displayName,
+            lowercase_name: res.user.displayName.toLowerCase(),
             email: res.user.email,
             photo_url: res.user.photoURL,
             last_logged_in: serverTimestamp(),

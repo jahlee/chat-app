@@ -2,21 +2,29 @@ import React, { useEffect, useState } from "react";
 import SearchEntry from "./SearchEntry";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../firebase-config";
+import "../styling/Search.css";
 
 export default function SearchDropdown(props) {
   const { search, setCurrConv } = props;
   const [users, setUsers] = useState([]);
-  const [hoveredUser, setHoveredUser] = useState(null);
+  const [selectedUser, setSelectedUser] = useState(null);
 
   useEffect(() => {
+    console.log("current users for search", search, "is:", users);
     const handleSearch = async () => {
-      const q = query(collection(db, "users"), where("name", "==", search));
-
       try {
+        const query_users = [];
+        const q = query(
+          collection(db, "users"),
+          where("lowercase_name", ">=", search),
+          where("lowercase_name", "<", `${search}\uf8ff`)
+        );
         const querySnapshot = await getDocs(q);
         querySnapshot.forEach((doc) => {
-          setUsers([...users, doc.data()]);
+          query_users.push(doc.data());
         });
+        console.log("setting users to:", query_users);
+        setUsers(query_users);
       } catch (err) {
         console.error("err retrieving searched users:", err);
       }
@@ -24,20 +32,27 @@ export default function SearchDropdown(props) {
     handleSearch();
   }, [search]);
 
+  useEffect(() => {
+    console.log("selectedUser changed to:", selectedUser);
+  }, [selectedUser]);
+
   const handleSelect = () => {
-    setCurrConv(hoveredUser);
+    setCurrConv(selectedUser);
+  };
+
+  const handleHoveredUser = (usr) => {
+    setSelectedUser(usr);
   };
 
   return (
     <ul className="dropdown">
-      {users.map((user) => (
+      {users.map((user, idx) => (
         <SearchEntry
-          id={user.id}
-          photo={user.photo_url}
-          name={user.name}
+          key={idx}
+          user={user}
           onSelect={handleSelect}
-          onHover={setHoveredUser}
-          isHovered={hoveredUser && hoveredUser.id === user.id}
+          onHover={handleHoveredUser}
+          isHovered={selectedUser && selectedUser.userId === user.userId}
         />
       ))}
     </ul>

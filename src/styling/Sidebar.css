@@ -50,21 +50,6 @@
   background-color: rgba(50, 50, 50, 0.15);
 }
 
-.input-search {
-  background-color: #303030;
-  border: none;
-  border-radius: 5px;
-  color: #d0d0d0;
-  font-size: 1.1rem;
-  margin-bottom: 10px;
-  padding: 8px 12px;
-  width: 90%;
-}
-
-.search::placeholder {
-  color: #b0b0b0;
-}
-
 .sidebar-conv {
   cursor: pointer;
   max-height: 100px;

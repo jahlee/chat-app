@@ -1,15 +1,21 @@
 import { collection, doc, serverTimestamp, setDoc } from "firebase/firestore";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import UserContext from "../context/UserContext";
 import { db } from "../firebase-config";
 import SearchDropdown from "./SearchDropdown";
 import SearchInput from "./SearchInput";
+import "../styling/Search.css";
 
 export default function Search({ setCurrConv }) {
   const [search, setSearch] = useState("");
+  const [searchSelected, setSearchSelected] = useState(false);
   const { user } = useContext(UserContext);
   const convRef = collection(db, "conversations");
   let timeoutId;
+
+  useEffect(() => {
+    console.log("search is selected:", searchSelected);
+  }, [searchSelected]);
 
   function handleSearchChange(newSearch) {
     console.log("changed value to: ", newSearch);
@@ -41,10 +47,17 @@ export default function Search({ setCurrConv }) {
   }
 
   return (
-    <React.Fragment>
-      <SearchInput setSearch={handleSearchChange} />
-      <button onClick={createNewConversation}>+</button>
-      <SearchDropdown search={search} setCurrConv={setCurrConv} />
-    </React.Fragment>
+    <div className="search-content">
+      <SearchInput
+        setSearch={handleSearchChange}
+        setSearchSelected={setSearchSelected}
+      />
+      <button onClick={createNewConversation} className="create-conv-button">
+        +
+      </button>
+      {searchSelected && (
+        <SearchDropdown search={search} setCurrConv={setCurrConv} />
+      )}
+    </div>
   );
 }
