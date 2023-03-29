@@ -107,7 +107,7 @@ export default function SidebarConv({ conversation, currConv, setCurrConv }) {
       )}
       {showConfirm && (
         <Modal onClose={handleAbort}>
-          <div class="modal-delete">
+          <div className="modal-delete">
             <p>Are you sure you want to delete this conversation?</p>
             <button id="confirmDelete" onClick={deleteConversation}>
               Yes, delete

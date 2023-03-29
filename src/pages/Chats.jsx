@@ -5,12 +5,22 @@ import Conversation from "../components/Conversation";
 import Sidebar from "../components/Sidebar";
 import UserContext from "../context/UserContext";
 import "../styling/Chats.css";
+import { useNavigate } from "react-router-dom";
 
 function Chats() {
   const [currConv, setCurrConv] = useState(null);
   const [conversations, setConversations] = useState([]);
-  const { user } = useContext(UserContext);
-  console.log("user:", user);
+  const { user, isAuth } = useContext(UserContext);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const wait = setTimeout(() => {
+      if (!isAuth) {
+        navigate("/");
+      }
+    }, 500);
+    return () => clearTimeout(wait);
+  }, [isAuth]);
 
   useEffect(() => {
     // get conversations from db
@@ -43,6 +53,10 @@ function Chats() {
 
     return () => unsubscribe();
   }, [user]);
+
+  if (!isAuth) {
+    return null;
+  }
 
   return (
     <div className="chats-container">

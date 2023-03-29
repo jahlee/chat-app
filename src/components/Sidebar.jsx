@@ -5,11 +5,11 @@ import "../styling/Sidebar.css";
 
 export default function Sidebar({ conversations, currConv, setCurrConv }) {
   return (
-    <div class="sidebar-content">
-      <div class="search-container">
+    <div className="sidebar-content">
+      <div className="search-container">
         <Search setCurrConv={setCurrConv} />
       </div>
-      <div class="conversations-container">
+      <div className="conversations-container">
         <Conversations
           conversations={conversations}
           currConv={currConv}

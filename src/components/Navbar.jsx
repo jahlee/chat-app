@@ -1,6 +1,6 @@
 import { signOut } from "firebase/auth";
 import React, { useContext } from "react";
-import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import UserContext from "../context/UserContext";
 import { auth } from "../firebase-config";
 import "../styling/Navbar.css";
@@ -8,11 +8,9 @@ import "../styling/Navbar.css";
 function Navbar() {
   const { isAuth } = useContext(UserContext);
   const location = useLocation();
-  const navigate = useNavigate();
 
   const logOut = () => {
     signOut(auth);
-    navigate("/login");
   };
 
   return (
@@ -42,7 +40,7 @@ function Navbar() {
           {location.pathname !== "/profile" && (
             <React.Fragment>
               <div className="nav-left">
-                <NavLink className="navbar-title" to="/" aria-label="Home">
+                <NavLink className="navbar-title" to="/chats" aria-label="Home">
                   ChatApp
                 </NavLink>
               </div>
@@ -57,7 +55,7 @@ function Navbar() {
                 <NavLink
                   className="navbar-link"
                   to="#"
-                  onClick={() => logOut()}
+                  onClick={logOut}
                   aria-label="Log Out"
                 >
                   Log Out

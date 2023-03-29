@@ -6,11 +6,19 @@ import "../styling/Home.css";
 function Home() {
   const { isAuth } = useContext(UserContext);
   const navigate = useNavigate();
+
   useEffect(() => {
-    if (isAuth) {
-      navigate("/chats");
-    }
+    const wait = setTimeout(() => {
+      if (isAuth) {
+        navigate("/chats");
+      }
+    }, 500);
+    return () => clearTimeout(wait);
   }, [isAuth]);
+
+  if (isAuth) {
+    return null;
+  }
 
   return (
     <div className="homepage-container">
