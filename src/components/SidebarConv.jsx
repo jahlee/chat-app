@@ -10,6 +10,7 @@ export default function SidebarConv({ conversation, currConv, setCurrConv }) {
   const [showDel, setShowDel] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const { user } = useContext(UserContext);
+
   let className = "sidebar-conv";
   if (currConv && currConv.conversation_id === conversation.conversation_id) {
     className += " selected-conv";
@@ -119,7 +120,10 @@ export default function SidebarConv({ conversation, currConv, setCurrConv }) {
         </Modal>
       )}
       <img src={conversation.photo_url} alt="img" className="sidebar-profile" />
-      <p className="sidebar-name">{conversation.last_message}...</p>
+      <div className="sidebar-details">
+        <h3 className="sidebar-name">{user.userId}</h3>
+        <p className="sidebar-preview">You: {conversation.last_message}</p>
+      </div>
     </li>
   );
 }

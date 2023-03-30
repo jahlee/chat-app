@@ -120,7 +120,9 @@ export default function Conversation({ conv }) {
       const convDoc = doc(convRef, conversation_id);
       const last_message =
         files && files.length > 0
-          ? `${files.length} files were added`
+          ? files.length > 1
+            ? `${files.length} files were added`
+            : "1 file was added"
           : message;
       await updateDoc(convDoc, {
         last_message: last_message,

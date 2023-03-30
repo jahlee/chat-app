@@ -57,6 +57,9 @@
   position: relative;
   list-style-type: none;
   border-radius: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
 }
 
 .sidebar-profile {
@@ -64,15 +67,38 @@
   height: 75px;
   border-radius: 50%;
   object-fit: cover;
-  float: left;
   margin-right: 10px;
 }
 
+.sidebar-details {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  width: calc(100% - 85px);
+}
+
 .sidebar-name {
+  margin: 5px 0px;
+  max-width: 100%;
+  font-size: 18px;
+  font-weight: 400;
+  align-self: flex-start;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.sidebar-preview {
   margin: 0;
-  display: inline-block;
-  vertical-align: middle;
-  line-height: 75px;
+  max-width: 100%;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 14px;
+  font-weight: lighter;
+  align-self: flex-start;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .selected-conv {
