@@ -76,8 +76,8 @@ function Chats() {
     const usr_id = usr.userId;
     const newConversationQuery = query(
       convRef,
-      where(`participants.${userId}`, "==", true),
-      where(`participants.${usr_id}`, "==", true),
+      where(`participants_obj.${userId}`, "==", true),
+      where(`participants_obj.${usr_id}`, "==", true),
       limit(1)
     );
     const querySnapshot = await getDocs(newConversationQuery);
@@ -89,7 +89,7 @@ function Chats() {
         newConversation = {
           conversation_id: newConvRef.id,
           participants: [userId, usr_id].sort(),
-          participants_obj: { userId: true, usr_id: true },
+          participants_obj: { [userId]: true, [usr_id]: true },
           photo_url: user.photo_url,
           last_message: "",
           last_timestamp: serverTimestamp(),
