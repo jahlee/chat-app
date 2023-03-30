@@ -5,10 +5,13 @@ import { db } from "../firebase-config";
 import SearchDropdown from "./SearchDropdown";
 import SearchInput from "./SearchInput";
 import "../styling/Search.css";
+import Modal from "./Modal";
 
 export default function Search({ setConvByUser }) {
   const [search, setSearch] = useState("");
   const [searchSelected, setSearchSelected] = useState(false);
+  const [createNewConv, setCreateNewConv] = useState(false);
+  const [newConvUsers, setNewConvUsers] = useState([]);
   const { user } = useContext(UserContext);
   const userId = user ? user.userId : "";
   const convRef = collection(db, "conversations");
@@ -31,21 +34,22 @@ export default function Search({ setConvByUser }) {
     // TODO: only create new conversation if it doesn't exist yet
     // TODO: have other user's id as input to this function
     // TODO: set photo_url to their profile pic(?)
-    try {
-      const newConvRef = doc(convRef);
-      const convData = {
-        conversation_id: newConvRef.id,
-        participants: [user.userId, "user1"].sort(),
-        participants_obj: { userId: true, user1: true },
-        photo_url: "google.com",
-        last_message: "",
-        last_timestamp: serverTimestamp(),
-      };
-      await setDoc(newConvRef, convData);
-      console.log("successfully created new conversation with data:", convData);
-    } catch (e) {
-      console.error(e.toString());
-    }
+    // try {
+    //   const newConvRef = doc(convRef);
+    //   const convData = {
+    //     conversation_id: newConvRef.id,
+    //     participants: [user.userId, "user1"].sort(),
+    //     participants_obj: { userId: true, user1: true },
+    //     photo_url: "google.com",
+    //     last_message: "",
+    //     last_timestamp: serverTimestamp(),
+    //   };
+    //   await setDoc(newConvRef, convData);
+    //   console.log("successfully created new conversation with data:", convData);
+    // } catch (e) {
+    //   console.error(e.toString());
+    // }
+    setCreateNewConv(true);
   }
   function handleSearchFocus() {
     setSearchSelected(true);
@@ -63,21 +67,78 @@ export default function Search({ setConvByUser }) {
     setConvByUser(usr);
   }
 
+  function handleAbort() {
+    setCreateNewConv(false);
+    setNewConvUsers([]);
+    setSearch("");
+  }
+
+  function stopPropagation(event) {
+    event.stopPropagation();
+  }
+
+  function addUserToConv(usr) {
+    setNewConvUsers([...newConvUsers, usr]);
+  }
+
+  function removeUser(idx) {
+    setNewConvUsers(newConvUsers.splice(idx, 1));
+  }
+
   return (
-    <div
-      className="search-content"
-      onFocus={handleSearchFocus}
-      onBlur={handleSearchBlur}
-    >
-      <SearchInput setSearch={handleSearchChange} />
+    <div className="search-content">
+      <SearchInput
+        setSearch={handleSearchChange}
+        onFocus={handleSearchFocus}
+        onBlur={handleSearchBlur}
+      />
       <button onClick={createNewConversation} className="create-conv-button">
         +
       </button>
+      {createNewConv && (
+        <Modal onClose={handleAbort}>
+          <div className="modal-create-conv" onClick={stopPropagation}>
+            <h1>Create a new conversation...</h1>
+            <SearchInput setSearch={handleSearchChange} />
+            <SearchDropdown
+              search={search}
+              handleSelectedUser={addUserToConv}
+              searchSelected={searchSelected}
+              type="modal"
+            />
+            <div className="modal-create-conv-users">
+              {newConvUsers && newConvUsers.length > 0 && <h2>Users:</h2>}
+              {newConvUsers.map((usr, idx) => (
+                <button
+                  onClick={() => removeUser(idx)}
+                  key={idx}
+                  className="modal-create-conv-user"
+                >
+                  {usr.name}
+                </button>
+              ))}
+            </div>
+            <button
+              onClick={handleAbort}
+              className="modal-create-conv-button modal-cancel-button"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={handleAbort}
+              className="modal-create-conv-button modal-create-button"
+            >
+              Create
+            </button>
+          </div>
+        </Modal>
+      )}
       {searchSelected && (
         <SearchDropdown
           search={search}
           handleSelectedUser={handleSelectedUser}
           searchSelected={searchSelected}
+          type="sidebar"
         />
       )}
     </div>

@@ -8,9 +8,11 @@ export default function SearchDropdown({
   search,
   handleSelectedUser,
   searchSelected,
+  type,
 }) {
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(searchSelected);
+  const className = type + "-dropdown";
 
   useEffect(() => {
     console.log("current users for search", search, "is:", users);
@@ -48,7 +50,7 @@ export default function SearchDropdown({
   };
 
   return (
-    <ul className="dropdown">
+    <ul className={className}>
       {users.map((user, idx) => (
         <SearchEntry
           key={idx}
@@ -56,6 +58,7 @@ export default function SearchDropdown({
           onSelect={handleSelect}
           onHover={handleHoveredUser}
           isHovered={selectedUser && selectedUser.userId === user.userId}
+          type={type}
         />
       ))}
     </ul>

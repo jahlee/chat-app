@@ -8,7 +8,7 @@
   align-items: center;
 }
 
-.dropdown {
+.sidebar-dropdown {
   position: absolute;
   top: 100%;
   left: 0;
@@ -26,18 +26,18 @@
   color: #303030;
 }
 
-.dropdown::-webkit-scrollbar {
+.sidebar-dropdown::-webkit-scrollbar {
   display: none;
 }
 
-.user-dropdown {
+.sidebar-user-dropdown {
   padding: 5px 10px;
   cursor: pointer;
   border-bottom: 1px solid #ccc;
   transition: background-color 0.2s;
 }
 
-.user-dropdown:last-child {
+.sidebar-user-dropdown:last-child {
   border-bottom: none;
 }
 
@@ -46,12 +46,12 @@
   color: #f1f1f1;
 }
 
-.user-dropdown:hover {
+.sidebar-user-dropdown:hover {
   background-color: rgba(54, 69, 79, 0.8);
   color: #f1f1f1;
 }
 
-.dropdown-profile {
+.sidebar-dropdown-profile {
   width: 50px;
   height: 50px;
   border-radius: 50%;
@@ -60,7 +60,7 @@
   margin-right: 10px;
 }
 
-.dropdown-name {
+.sidebar-dropdown-name {
   margin: 0;
   display: inline-block;
   vertical-align: middle;
@@ -86,4 +86,110 @@
   font-size: 1.1rem;
   padding: 8px 12px;
   cursor: pointer;
+}
+
+.modal-create-conv {
+  background-color: #121212;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  padding: 1.5rem;
+  text-align: center;
+  width: 50%;
+  height: 80%;
+}
+
+.modal-create-conv h1 {
+  padding: 0;
+  margin: 0;
+  margin-bottom: 20px;
+}
+
+.modal-create-conv-users {
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+.modal-create-conv-button {
+  border: none;
+  border-radius: 4px;
+  color: white;
+  cursor: pointer;
+  font-size: 1.2rem;
+  margin-right: 1rem;
+  padding: 0.5rem 1rem;
+  transition: all 0.3s ease;
+}
+
+.modal-create-button {
+  background-color: #4caf50;
+}
+
+.modal-create-button:hover {
+  background-color: #388e3c;
+}
+
+.modal-cancel-button {
+  background-color: #ff6347;
+}
+
+.modal-cancel-button:hover {
+  background-color: #ff3b14;
+}
+
+.modal-dropdown {
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-height: 75%;
+  overflow-y: scroll;
+  padding: 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #f1f1f1;
+  color: #303030;
+}
+
+.modal-dropdown::-webkit-scrollbar {
+  display: none;
+}
+
+.modal-user-dropdown {
+  padding: 5px 10px;
+  cursor: pointer;
+  border-bottom: 1px solid #ccc;
+  transition: background-color 0.2s;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.modal-user-dropdown:last-child {
+  border-bottom: none;
+}
+
+.modal-user-dropdown:hover {
+  background-color: rgba(54, 69, 79, 0.8);
+  color: #f1f1f1;
+}
+
+.modal-dropdown-profile {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 10px;
+}
+
+.modal-dropdown-name {
+  font-size: 1rem;
+}
+
+.modal-create-conv-user {
+  border: #303030;
+  font-size: 1rem;
+  margin: 5px;
+}
+.modal-create-conv-user:hover {
+  background-color: #ff6347;
 }
