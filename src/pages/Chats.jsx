@@ -70,14 +70,20 @@ function Chats() {
     return () => unsubscribe();
   }, [user]);
 
-  const setConversationByUser = async (usr) => {
+  const setConversationByUsers = async (usrs) => {
     // where("participants", "==", [id1, id2])
+    console.log(usrs);
+    const participants = usrs.map((usr) => usr.userId);
+    participants.push(userId);
+    participants.sort();
+    const participants_obj = {};
+    participants.forEach((id) => {
+      participants_obj[id] = true;
+    });
     let newConversation = {};
-    const usr_id = usr.userId;
     const newConversationQuery = query(
       convRef,
-      where(`participants_obj.${userId}`, "==", true),
-      where(`participants_obj.${usr_id}`, "==", true),
+      where(`participants`, "==", participants),
       limit(1)
     );
     const querySnapshot = await getDocs(newConversationQuery);
@@ -88,8 +94,8 @@ function Chats() {
         const newConvRef = doc(convRef);
         newConversation = {
           conversation_id: newConvRef.id,
-          participants: [userId, usr_id].sort(),
-          participants_obj: { [userId]: true, [usr_id]: true },
+          participants: participants,
+          participants_obj: participants_obj,
           photo_url: user.photo_url,
           last_message: "",
           last_timestamp: serverTimestamp(),
@@ -119,7 +125,7 @@ function Chats() {
           conversations={conversations}
           currConv={currConv}
           setCurrConv={setCurrConv}
-          setConvByUser={setConversationByUser}
+          setConvByUsers={setConversationByUsers}
         />
       </div>
       <div className="conversation">

@@ -7,7 +7,7 @@ import SearchInput from "./SearchInput";
 import "../styling/Search.css";
 import Modal from "./Modal";
 
-export default function Search({ setConvByUser }) {
+export default function Search({ setConvByUsers }) {
   const [search, setSearch] = useState("");
   const [searchSelected, setSearchSelected] = useState(false);
   const [createNewConv, setCreateNewConv] = useState(false);
@@ -30,33 +30,16 @@ export default function Search({ setConvByUser }) {
     }, 500);
   }
 
-  async function createNewConversation() {
-    // TODO: only create new conversation if it doesn't exist yet
-    // TODO: have other user's id as input to this function
-    // TODO: set photo_url to their profile pic(?)
-    // try {
-    //   const newConvRef = doc(convRef);
-    //   const convData = {
-    //     conversation_id: newConvRef.id,
-    //     participants: [user.userId, "user1"].sort(),
-    //     participants_obj: { userId: true, user1: true },
-    //     photo_url: "google.com",
-    //     last_message: "",
-    //     last_timestamp: serverTimestamp(),
-    //   };
-    //   await setDoc(newConvRef, convData);
-    //   console.log("successfully created new conversation with data:", convData);
-    // } catch (e) {
-    //   console.error(e.toString());
-    // }
+  function toggleNewConversation() {
     setCreateNewConv(true);
   }
+
   function handleSearchFocus() {
     setSearchSelected(true);
   }
 
   function handleSearchBlur() {
-    // wait 200ms to allow setConvByUser to propogate
+    // wait 200ms to allow setConvByUsers to propogate
     clearTimeout(timeoutId);
     timeoutId = setTimeout(() => {
       setSearchSelected(false);
@@ -64,7 +47,14 @@ export default function Search({ setConvByUser }) {
   }
 
   function handleSelectedUser(usr) {
-    setConvByUser(usr);
+    setConvByUsers([usr]);
+  }
+
+  function handleSelectedUsers() {
+    setConvByUsers(newConvUsers);
+    setCreateNewConv(false);
+    setSearch("");
+    setNewConvUsers([]);
   }
 
   function handleAbort() {
@@ -95,7 +85,7 @@ export default function Search({ setConvByUser }) {
         onFocus={handleSearchFocus}
         onBlur={handleSearchBlur}
       />
-      <button onClick={createNewConversation} className="create-conv-button">
+      <button onClick={toggleNewConversation} className="create-conv-button">
         +
       </button>
       {createNewConv && (
@@ -128,7 +118,7 @@ export default function Search({ setConvByUser }) {
               Cancel
             </button>
             <button
-              onClick={handleAbort}
+              onClick={handleSelectedUsers}
               className="modal-create-conv-button modal-create-button"
             >
               Create

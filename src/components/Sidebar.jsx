@@ -7,12 +7,12 @@ export default function Sidebar({
   conversations,
   currConv,
   setCurrConv,
-  setConvByUser,
+  setConvByUsers,
 }) {
   return (
     <div className="sidebar-content">
       <div className="search-container">
-        <Search setConvByUser={setConvByUser} />
+        <Search setConvByUsers={setConvByUsers} />
       </div>
       <div className="conversations-container">
         <Conversations
