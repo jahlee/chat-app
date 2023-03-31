@@ -126,6 +126,7 @@ export default function Conversation({ conv }) {
           : message;
       await updateDoc(convDoc, {
         last_message: last_message,
+        last_message_userId: user.userId,
         last_timestamp: serverTimestamp(),
       });
     } catch (e) {

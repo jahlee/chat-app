@@ -1,20 +1,32 @@
-import { deleteDoc, doc, getDocs, query, where } from "firebase/firestore";
+import {
+  deleteDoc,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  where,
+} from "firebase/firestore";
 import { deleteObject, ref } from "firebase/storage";
 import React, { useContext, useEffect, useState } from "react";
 import UserContext from "../context/UserContext";
-import { convRef, filesRef, messagesRef, storage } from "../firebase-config";
+import {
+  convRef,
+  filesRef,
+  messagesRef,
+  storage,
+  usersRef,
+} from "../firebase-config";
 import "../styling/Sidebar.css";
 import Modal from "./Modal";
 
 export default function SidebarConv({ conversation, currConv, setCurrConv }) {
   const [showDel, setShowDel] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
+  const [lastUserName, setLastUserName] = useState("");
   const { user } = useContext(UserContext);
   let last_timestamp_display = "now";
   try {
     const timestamp_date = conversation.last_timestamp.toDate();
-    console.log(timestamp_date);
-    console.log(timestamp_date.toLocaleString());
     const timeDiff = new Date() - timestamp_date;
     const minsDiff = Math.floor(timeDiff / (1000 * 60)); // ms to s, s to min
     const hoursDiff = Math.floor(minsDiff / 60); // min to hr
@@ -50,15 +62,34 @@ export default function SidebarConv({ conversation, currConv, setCurrConv }) {
     console.error(e);
   }
 
+  useEffect(() => {
+    async function fetchLastUserName() {
+      try {
+        if (conversation.last_message_userId === user.userId) {
+          setLastUserName("You");
+        } else {
+          console.log(conversation);
+          const userDoc = doc(usersRef, conversation.last_message_userId);
+          const docSnapshot = await getDoc(userDoc);
+          if (docSnapshot.exists()) {
+            const userData = docSnapshot.data();
+            setLastUserName(userData.name);
+          }
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    }
+    fetchLastUserName();
+  }, [conversation, user]);
+
   let className = "sidebar-conv";
   if (currConv && currConv.conversation_id === conversation.conversation_id) {
     className += " selected-conv";
   }
 
   const handleSelect = () => {
-    console.log("clicked on:", conversation);
     if (currConv !== conversation) {
-      console.log("setting new conversation to:", conversation);
       setCurrConv(conversation);
     }
   };
@@ -78,7 +109,6 @@ export default function SidebarConv({ conversation, currConv, setCurrConv }) {
       // delete each message and its associated object storages
       const deletePromises = messagesSnapshot.docs.map(async (messageDoc) => {
         const messageData = messageDoc.data();
-        console.log("message:", messageData);
         // delete each object storage + file doc in the file_refs array
         const deleteFilePromises = messageData.file_refs.map(
           async (fileRefObj) => {
@@ -161,7 +191,9 @@ export default function SidebarConv({ conversation, currConv, setCurrConv }) {
       <img src={conversation.photo_url} alt="img" className="sidebar-profile" />
       <div className="sidebar-details">
         <h3 className="sidebar-name">{user.userId}</h3>
-        <p className="sidebar-preview">You: {conversation.last_message}</p>
+        <p className="sidebar-preview">
+          {lastUserName}: {conversation.last_message}
+        </p>
         <p className="sidebar-timestamp">{last_timestamp_display}</p>
       </div>
     </li>
