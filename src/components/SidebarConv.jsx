@@ -10,6 +10,45 @@ export default function SidebarConv({ conversation, currConv, setCurrConv }) {
   const [showDel, setShowDel] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const { user } = useContext(UserContext);
+  let last_timestamp_display = "now";
+  try {
+    const timestamp_date = conversation.last_timestamp.toDate();
+    console.log(timestamp_date);
+    console.log(timestamp_date.toLocaleString());
+    const timeDiff = new Date() - timestamp_date;
+    const minsDiff = Math.floor(timeDiff / (1000 * 60)); // ms to s, s to min
+    const hoursDiff = Math.floor(minsDiff / 60); // min to hr
+    const daysDiff = Math.floor(hoursDiff / 24); // hr to day
+    const monthsDiff = Math.floor(daysDiff / 30.44); // average number of days in a month
+    const yearsDiff = Math.floor(daysDiff / 365); // day to year
+    let unit = "now";
+    let amount = 0;
+    if (yearsDiff >= 1) {
+      unit = "year";
+      amount = yearsDiff;
+    } else if (monthsDiff >= 1) {
+      unit = "month";
+      amount = monthsDiff;
+    } else if (daysDiff >= 1) {
+      unit = "day";
+      amount = daysDiff;
+    } else if (hoursDiff >= 1) {
+      unit = "hour";
+      amount = hoursDiff;
+    } else if (minsDiff >= 1) {
+      unit = "min";
+      amount = minsDiff;
+    }
+
+    last_timestamp_display =
+      amount === 0
+        ? "now"
+        : amount === 1
+        ? `${amount} ${unit} ago`
+        : `${amount} ${unit}s ago`;
+  } catch (e) {
+    console.error(e);
+  }
 
   let className = "sidebar-conv";
   if (currConv && currConv.conversation_id === conversation.conversation_id) {
@@ -123,6 +162,7 @@ export default function SidebarConv({ conversation, currConv, setCurrConv }) {
       <div className="sidebar-details">
         <h3 className="sidebar-name">{user.userId}</h3>
         <p className="sidebar-preview">You: {conversation.last_message}</p>
+        <p className="sidebar-timestamp">{last_timestamp_display}</p>
       </div>
     </li>
   );
