@@ -95,7 +95,7 @@
   padding: 1.5rem;
   text-align: center;
   width: 50%;
-  height: 80%;
+  min-height: 80%;
 }
 
 .modal-create-conv h1 {

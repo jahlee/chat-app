@@ -3,7 +3,6 @@ import ReactDOM from "react-dom";
 import "../styling/Modal.css";
 
 const Modal = ({ onClose, children }) => {
-  console.log(onClose, children);
   const modalRef = useRef();
 
   // Define the keydown handler for the escape key

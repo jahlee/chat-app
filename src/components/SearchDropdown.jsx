@@ -37,10 +37,6 @@ export default function SearchDropdown({
     handleSearch();
   }, [search]);
 
-  useEffect(() => {
-    console.log("selectedUser changed to:", selectedUser);
-  }, [selectedUser]);
-
   const handleSelect = () => {
     handleSelectedUser(selectedUser);
   };

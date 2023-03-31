@@ -78,11 +78,14 @@ export default function Search({ setConvByUser }) {
   }
 
   function addUserToConv(usr) {
-    setNewConvUsers([...newConvUsers, usr]);
+    const user_exists = newConvUsers.some((i) => i.userId === usr.userId);
+    if (!user_exists) setNewConvUsers([...newConvUsers, usr]);
   }
 
   function removeUser(idx) {
-    setNewConvUsers(newConvUsers.splice(idx, 1));
+    const newUsers = [...newConvUsers];
+    newUsers.splice(idx, 1);
+    setNewConvUsers(newUsers);
   }
 
   return (
