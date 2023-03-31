@@ -19,6 +19,7 @@ import UserContext from "../context/UserContext";
 import ChatInput from "./ChatInput";
 import "../styling/Chats.css";
 import Modal from "./Modal";
+import Message from "./Message";
 
 export default function Conversation({ conv }) {
   const conversation_id = conv ? conv.conversation_id : "";
@@ -157,45 +158,16 @@ export default function Conversation({ conv }) {
     console.log(url, "being opened");
   }
 
-  function renderFiles(file_refs) {
-    return (
-      <div className="files-container">
-        {file_refs.map((refObj) => {
-          const { url, type } = refObj;
-          const fileRef = ref(storage, url);
-          return type === "image" ? (
-            <img
-              key={url}
-              src={url}
-              className="image"
-              alt={fileRef ? fileRef.name : ""}
-              onClick={() => openImage(url)}
-            />
-          ) : (
-            <div className="pdf" onClick={() => openPdf(url)}>
-              <FontAwesomeIcon icon={faFile} className="pdf-icon" />
-              {fileRef.name}
-            </div>
-          );
-        })}
-      </div>
-    );
-  }
-
   function renderMessages() {
     return (
       <div className="messages-container">
         {messages.map((message) => {
-          const className =
-            message.sender_id === user.userId
-              ? "sent-message"
-              : "receive-message";
           return (
-            <div key={message.id} className={className}>
-              <p>{message.conversation_id}</p>
-              <p>{message.text}</p>
-              {message.file_refs && renderFiles(message.file_refs)}
-            </div>
+            <Message
+              message={message}
+              openImage={openImage}
+              openPdf={openPdf}
+            />
           );
         })}
       </div>
