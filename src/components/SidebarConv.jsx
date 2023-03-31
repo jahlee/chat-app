@@ -1,4 +1,5 @@
 import {
+  QuerySnapshot,
   deleteDoc,
   doc,
   getDoc,
@@ -22,9 +23,11 @@ import Modal from "./Modal";
 export default function SidebarConv({ conversation, currConv, setCurrConv }) {
   const [showDel, setShowDel] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
+  const [convName, setConvName] = useState("");
   const [lastUserName, setLastUserName] = useState("");
   const { user } = useContext(UserContext);
   let last_timestamp_display = "now";
+
   try {
     const timestamp_date = conversation.last_timestamp.toDate();
     const timeDiff = new Date() - timestamp_date;
@@ -68,7 +71,6 @@ export default function SidebarConv({ conversation, currConv, setCurrConv }) {
         if (conversation.last_message_userId === user.userId) {
           setLastUserName("You");
         } else {
-          console.log(conversation);
           const userDoc = doc(usersRef, conversation.last_message_userId);
           const docSnapshot = await getDoc(userDoc);
           if (docSnapshot.exists()) {
@@ -81,6 +83,32 @@ export default function SidebarConv({ conversation, currConv, setCurrConv }) {
       }
     }
     fetchLastUserName();
+  }, [conversation, user]);
+
+  useEffect(() => {
+    async function fetchUserNames() {
+      try {
+        const participantsNames = [];
+        await Promise.all(
+          conversation.participants.map(async (id) => {
+            if (id !== user.userId) {
+              const userDoc = doc(usersRef, id);
+              const docSnapshot = await getDoc(userDoc);
+              participantsNames.push(docSnapshot.data().name);
+            }
+          })
+        );
+        console.log(conversation, participantsNames.length);
+        setConvName(
+          participantsNames.length > 1
+            ? participantsNames.join(", ")
+            : participantsNames.join("")
+        );
+      } catch (e) {
+        console.error(e);
+      }
+    }
+    fetchUserNames();
   }, [conversation, user]);
 
   let className = "sidebar-conv";
@@ -190,7 +218,7 @@ export default function SidebarConv({ conversation, currConv, setCurrConv }) {
       )}
       <img src={conversation.photo_url} alt="img" className="sidebar-profile" />
       <div className="sidebar-details">
-        <h3 className="sidebar-name">{user.userId}</h3>
+        <h3 className="sidebar-name">{convName}</h3>
         <p className="sidebar-preview">
           {lastUserName}: {conversation.last_message}
         </p>
