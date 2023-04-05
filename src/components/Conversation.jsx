@@ -159,19 +159,42 @@ export default function Conversation({ conv }) {
   }
 
   function renderMessages() {
-    return (
-      <div className="messages-container">
-        {messages.map((message) => {
-          return (
-            <Message
-              message={message}
-              openImage={openImage}
-              openPdf={openPdf}
-            />
-          );
-        })}
-      </div>
-    );
+    const returnMessages = [];
+    let prev_userId = null;
+    let prev_timestamp = new Date(0);
+    let showTime = true;
+    let showUser = true;
+    for (let idx = messages.length - 1; idx >= 0; idx--) {
+      const message = messages[idx];
+      try {
+        const message_timestamp = message.timestamp.toDate();
+        if (idx < messages.length - 1) {
+          const timeDiff = message_timestamp - prev_timestamp;
+          const minsDiff = Math.floor(timeDiff / (1000 * 60)); // ms to s, s to min
+          console.log(minsDiff);
+          // more than 5 mins from last timestamped message
+          showTime = minsDiff > 5;
+          showUser = prev_userId === message.sender_id;
+        }
+        prev_userId = message.sender_id;
+        prev_timestamp = showTime ? message_timestamp : prev_timestamp;
+        console.log(idx, showUser, showTime, message);
+      } catch (err) {
+        showTime = false;
+        console.error(err);
+      }
+      returnMessages.push(
+        <Message
+          key={idx}
+          message={message}
+          openImage={openImage}
+          openPdf={openPdf}
+          showUser={showUser}
+          showTime={showTime}
+        />
+      );
+    }
+    return <div className="messages-container">{returnMessages.reverse()}</div>;
   }
 
   return (
