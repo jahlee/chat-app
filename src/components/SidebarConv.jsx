@@ -1,5 +1,4 @@
 import {
-  QuerySnapshot,
   deleteDoc,
   doc,
   getDoc,
@@ -17,6 +16,8 @@ import {
   storage,
   usersRef,
 } from "../firebase-config";
+import chat_logo from "../assets/chat.png";
+import groupchat_logo from "../assets/groupchat.png";
 import "../styling/Sidebar.css";
 import Modal from "./Modal";
 
@@ -25,7 +26,32 @@ export default function SidebarConv({ conversation, currConv, setCurrConv }) {
   const [showConfirm, setShowConfirm] = useState(false);
   const [convName, setConvName] = useState("");
   const [lastUserName, setLastUserName] = useState("");
+  const [photoURL, setPhotoURL] = useState(chat_logo);
   const { user } = useContext(UserContext);
+
+  useEffect(() => {
+    async function fetchPhotoURL() {
+      try {
+        const otherUserId = conversation.participants.filter(
+          (id) => id !== user.userId
+        )[0];
+        const userDoc = doc(usersRef, otherUserId);
+        const docSnapshot = await getDoc(userDoc);
+        if (docSnapshot.exists()) {
+          const userData = docSnapshot.data();
+          setPhotoURL(userData.photo_url);
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    }
+    if (conversation.participants && conversation.participants.length > 2) {
+      console.log("using gc");
+      setPhotoURL(groupchat_logo);
+    } else {
+      fetchPhotoURL();
+    }
+  }, [conversation, user]);
   let last_timestamp_display = "now";
 
   try {
@@ -216,7 +242,7 @@ export default function SidebarConv({ conversation, currConv, setCurrConv }) {
           </div>
         </Modal>
       )}
-      <img src={conversation.photo_url} alt="img" className="sidebar-profile" />
+      <img src={photoURL} alt="img" className="sidebar-profile" />
       <div className="sidebar-details">
         <h3 className="sidebar-name">{convName}</h3>
         <p className="sidebar-preview">
