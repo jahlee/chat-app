@@ -13,8 +13,6 @@ import {
   updateDoc,
 } from "@firebase/firestore";
 import { v4 as uuidv4 } from "uuid";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFile } from "@fortawesome/free-regular-svg-icons";
 import UserContext from "../context/UserContext";
 import ChatInput from "./ChatInput";
 import "../styling/Chats.css";
@@ -174,7 +172,7 @@ export default function Conversation({ conv }) {
           console.log(minsDiff);
           // more than 5 mins from last timestamped message
           showTime = minsDiff > 5;
-          showUser = prev_userId === message.sender_id;
+          showUser = prev_userId !== message.sender_id;
         }
         prev_userId = message.sender_id;
         prev_timestamp = showTime ? message_timestamp : prev_timestamp;

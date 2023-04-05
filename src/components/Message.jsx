@@ -107,11 +107,13 @@ export default function Message({
   }
 
   return (
-    <div className={className}>
-      {showTime && <p>{timestamp_display}</p>}
-      {showUser && senderName && <p>{senderName}</p>}
-      {message && message.text && <p>{message.text}</p>}
-      {message.file_refs && renderFiles(message.file_refs)}
-    </div>
+    <React.Fragment>
+      <div className={className}>
+        {message && message.text && <p>{message.text}</p>}
+        {message.file_refs && renderFiles(message.file_refs)}
+      </div>
+      {showUser && senderName && <p className="sender">{senderName}</p>}
+      {showTime && <p className="timestamp">{timestamp_display}</p>}
+    </React.Fragment>
   );
 }
