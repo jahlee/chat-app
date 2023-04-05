@@ -5,23 +5,27 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFile } from "@fortawesome/free-regular-svg-icons";
 import UserContext from "../context/UserContext";
 import { doc, getDoc } from "firebase/firestore";
+import "../styling/Chats.css";
 
 export default function Message({ message, openImage, openPdf }) {
   const { user } = useContext(UserContext);
   const [senderName, setSenderName] = useState("");
-  const className =
-    message.sender_id === user.userId ? "sent-message" : "receive-message";
+  let className = "message ";
+  className +=
+    message.sender_id === user.userId ? "sent-message " : "receive-message ";
 
   useEffect(() => {
     async function fetchSenderName() {
       try {
-        if (message.sender_id !== user.userId) {
+        if (message.sender_id && message.sender_id !== user.userId) {
           const userDoc = doc(usersRef, message.sender_id);
           const docSnapshot = await getDoc(userDoc);
           if (docSnapshot.exists()) {
             const userData = docSnapshot.data();
             setSenderName(userData.name);
           }
+        } else {
+          setSenderName("");
         }
       } catch (e) {
         console.error(e);
@@ -57,8 +61,8 @@ export default function Message({ message, openImage, openPdf }) {
 
   return (
     <div key={message.id} className={className}>
-      <p>{senderName}</p>
-      <p>{message.text}</p>
+      {senderName && <p>{senderName}</p>}
+      {message && message.text && <p>{message.text}</p>}
       {message.file_refs && renderFiles(message.file_refs)}
     </div>
   );
