@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { convRef, filesRef, messagesRef, storage } from "../firebase-config";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import {
@@ -24,15 +24,18 @@ export default function Conversation({ conv }) {
   const [messages, setMessages] = useState([]);
   const [imageOpened, setImageOpened] = useState(false);
   const [openImageURL, setOpenImageURL] = useState("");
+  const [messageLimit, setMessageLimit] = useState(15);
   const { user } = useContext(UserContext);
-  const messagesQuery = query(
-    messagesRef,
-    where("conversation_id", "==", conversation_id),
-    orderBy("timestamp", "desc"),
-    limit(10)
-  );
+  const chatWindowRef = useRef();
+
   // load messages + use handler to get messages
   useEffect(() => {
+    const messagesQuery = query(
+      messagesRef,
+      where("conversation_id", "==", conversation_id),
+      orderBy("timestamp", "desc"),
+      limit(messageLimit)
+    );
     // use snapshot for real-time listener
     const unsubscribe = onSnapshot(
       messagesQuery,
@@ -49,11 +52,30 @@ export default function Conversation({ conv }) {
     );
 
     return () => unsubscribe();
-  }, [conv]);
+  }, [conv, messageLimit]);
 
   useEffect(() => {
-    console.log("imageOpened:", imageOpened);
-  }, [imageOpened]);
+    if (chatWindowRef && chatWindowRef.current) {
+      try {
+        const elem = chatWindowRef.current;
+        elem.addEventListener("scroll", handleScroll);
+        return () => {
+          elem.removeEventListener("scroll", handleScroll);
+        };
+      } catch (err) {
+        console.error(err);
+      }
+    }
+  }, [messageLimit]);
+
+  const handleScroll = () => {
+    if (
+      chatWindowRef.current.clientHeight ===
+      chatWindowRef.current.scrollHeight + chatWindowRef.current.scrollTop
+    ) {
+      setMessageLimit(messageLimit + 10);
+    }
+  };
 
   async function sendMessage(message, files) {
     try {
@@ -127,6 +149,7 @@ export default function Conversation({ conv }) {
         last_message_userId: user.userId,
         last_timestamp: serverTimestamp(),
       });
+      setMessageLimit(messageLimit + 1);
     } catch (e) {
       console.error(e);
     }
@@ -189,7 +212,11 @@ export default function Conversation({ conv }) {
         />
       );
     }
-    return <div className="messages-container">{returnMessages.reverse()}</div>;
+    return (
+      <div className="messages-container" ref={chatWindowRef}>
+        {returnMessages.reverse()}
+      </div>
+    );
   }
 
   return (
