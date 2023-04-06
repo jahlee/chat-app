@@ -42,7 +42,6 @@ export default function Conversation({ conv }) {
           items.push(doc.data());
         });
         setMessages(items);
-        console.log("messages:", items);
       },
       (err) => {
         console.error(err);
@@ -169,14 +168,12 @@ export default function Conversation({ conv }) {
         if (idx < messages.length - 1) {
           const timeDiff = message_timestamp - prev_timestamp;
           const minsDiff = Math.floor(timeDiff / (1000 * 60)); // ms to s, s to min
-          console.log(minsDiff);
           // more than 5 mins from last timestamped message
           showTime = minsDiff > 5;
           showUser = prev_userId !== message.sender_id;
         }
         prev_userId = message.sender_id;
         prev_timestamp = showTime ? message_timestamp : prev_timestamp;
-        console.log(idx, showUser, showTime, message);
       } catch (err) {
         showTime = false;
         console.error(err);
