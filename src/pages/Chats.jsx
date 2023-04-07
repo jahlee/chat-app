@@ -59,8 +59,8 @@ function Chats() {
         console.log("conversations:", items);
 
         if (items) {
-          // set current conv to the most recent conversation
-          setCurrConv(items[0]);
+          // set current conv to the most recent conversation on first load
+          if (!currConv) setCurrConv(items[0]);
         }
       },
       (err) => {
