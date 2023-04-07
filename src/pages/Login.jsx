@@ -31,7 +31,7 @@ function Login() {
           const userData = docSnapshot.data();
           console.log("old user data:", userData);
           const newTimestamp = serverTimestamp();
-          await updateDoc(userDoc, { last_logged_in: newTimestamp }).catch(
+          await updateDoc(userDoc, { last_active: newTimestamp }).catch(
             (err) => {
               console.error("error updating user doc:", err);
             }
@@ -43,7 +43,7 @@ function Login() {
             lowercase_name: res.user.displayName.toLowerCase(),
             email: res.user.email,
             photo_url: res.user.photoURL,
-            last_logged_in: serverTimestamp(),
+            last_active: serverTimestamp(),
           };
           console.log("creating new entry:", newUser);
           await setDoc(userDoc, newUser);

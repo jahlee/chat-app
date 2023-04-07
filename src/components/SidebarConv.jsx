@@ -28,6 +28,7 @@ export default function SidebarConv({ conversation, currConv, setCurrConv }) {
   const [convName, setConvName] = useState("");
   const [lastUserName, setLastUserName] = useState("");
   const [photoURL, setPhotoURL] = useState(chat_logo);
+  const [isActive, setIsActive] = useState(false);
   const { user } = useContext(UserContext);
 
   useEffect(() => {
@@ -47,14 +48,48 @@ export default function SidebarConv({ conversation, currConv, setCurrConv }) {
       }
     }
     if (conversation.participants && conversation.participants.length > 2) {
-      console.log("using gc");
       setPhotoURL(groupchat_logo);
-    } else {
+    } else if (
+      conversation.participants &&
+      conversation.participants.length === 2
+    ) {
       fetchPhotoURL();
+    } else {
+      setPhotoURL(chat_logo);
     }
   }, [conversation, user]);
-  let last_timestamp_display = "now";
 
+  useEffect(() => {
+    async function fetchActive() {
+      try {
+        const otherUserIds = conversation.participants.filter(
+          (id) => id !== user.userId
+        );
+        otherUserIds.map(async (usrId) => {
+          const userDoc = doc(usersRef, usrId);
+          const docSnapshot = await getDoc(userDoc);
+          if (docSnapshot.exists()) {
+            const userData = docSnapshot.data();
+            const timeDiff = new Date() - userData.last_active.toDate();
+            // if active within past 5 minutes
+            if (timeDiff / (1000 * 60) < 5) {
+              setIsActive(true);
+            } else {
+              setIsActive(false);
+            }
+          }
+        });
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    if (conversation.participants) {
+      fetchActive();
+    }
+  }, [conversation, user, conversation.last_message]);
+
+  let last_timestamp_display = "now";
   try {
     const timestamp_date = conversation.last_timestamp.toDate();
     const timeDiff = new Date() - timestamp_date;
@@ -254,12 +289,17 @@ export default function SidebarConv({ conversation, currConv, setCurrConv }) {
           </div>
         </Modal>
       )}
-      <img src={photoURL} alt="img" className="sidebar-profile" />
+      <div className="profile-container">
+        <img src={photoURL} alt="img" className="sidebar-profile" />
+        {isActive && <div className="active-indicator"></div>}
+      </div>
       <div className="sidebar-details">
         <h3 className="sidebar-name">{convName}</h3>
-        <p className="sidebar-preview">
-          {lastUserName}: {conversation.last_message}
-        </p>
+        {lastUserName && (
+          <p className="sidebar-preview">
+            {lastUserName}: {conversation.last_message}
+          </p>
+        )}
         <p className="sidebar-timestamp">{last_timestamp_display}</p>
       </div>
     </li>

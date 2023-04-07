@@ -32,14 +32,14 @@ export function UserProvider({ children }) {
         email: authUser.email,
         name: userDoc ? userDoc.data().name : authUser.displayName,
         photo_url: userDoc ? userDoc.data().photo_url : authUser.photoURL,
-        last_logged_in: serverTimestamp(),
+        last_active: serverTimestamp(),
       }
     : {
         userId: null,
         email: null,
         name: null,
         photo_url: null,
-        last_logged_in: null,
+        last_active: null,
       };
   const value = { user, isAuth };
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;

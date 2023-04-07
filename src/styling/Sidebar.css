@@ -53,7 +53,7 @@
 .sidebar-conv {
   cursor: pointer;
   max-height: 100px;
-  padding: 2px 10px;
+  padding: 0 10px;
   position: relative;
   list-style-type: none;
   border-radius: 10px;
@@ -62,7 +62,30 @@
   flex-direction: row;
 }
 
+.profile-container {
+  position: relative;
+  flex-direction: column;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.active-indicator {
+  position: absolute;
+  bottom: 15px;
+  right: 15px;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background-color: green;
+  border: 2px solid white;
+}
+
 .sidebar-profile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 75px;
   height: 75px;
   border-radius: 50%;

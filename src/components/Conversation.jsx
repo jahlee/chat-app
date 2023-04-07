@@ -5,6 +5,7 @@ import {
   messagesRef,
   statusRef,
   storage,
+  usersRef,
 } from "../firebase-config";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import {
@@ -17,6 +18,7 @@ import {
   orderBy,
   limit,
   updateDoc,
+  getDoc,
   getDocs,
 } from "@firebase/firestore";
 import { v4 as uuidv4 } from "uuid";
@@ -186,6 +188,7 @@ export default function Conversation({ conv }) {
         timestamp: serverTimestamp(),
       };
       await addDoc(messagesRef, messageData);
+      setMessageLimit(messageLimit + 1);
 
       // update conversation with last_message and last_timestamp
       const convDoc = doc(convRef, conversation_id);
@@ -200,7 +203,23 @@ export default function Conversation({ conv }) {
         last_message_userId: user.userId,
         last_timestamp: serverTimestamp(),
       });
-      setMessageLimit(messageLimit + 1);
+
+      // update user's last_active (by the minute rather than on every push)
+      const userDoc = doc(usersRef, user.userId);
+      const userSnapshot = await getDoc(userDoc);
+      if (userSnapshot.exists()) {
+        const userData = userSnapshot.data();
+        const last_active = userData.last_active.toDate();
+        console.log(
+          "HEHEHEHEHHEHEFALSKDJFASDLKDFJASDDF",
+          (new Date() - last_active) / (1000 * 60)
+        );
+        if ((new Date() - last_active) / (1000 * 60) > 1) {
+          await updateDoc(userDoc, {
+            last_active: serverTimestamp(),
+          });
+        }
+      }
     } catch (e) {
       console.error(e);
     }
