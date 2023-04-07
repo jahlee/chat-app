@@ -193,3 +193,11 @@
 .modal-create-conv-user:hover {
   background-color: #ff6347;
 }
+
+.group-divider {
+  display: flex;
+  border-top: 2px solid black;
+  border-bottom: 2px solid black;
+  align-items: center;
+  justify-content: center;
+}

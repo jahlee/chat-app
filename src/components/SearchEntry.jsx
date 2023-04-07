@@ -3,7 +3,10 @@ import "../styling/Search.css";
 
 export default function SearchEntry(props) {
   const { user, onHover, onSelect, isHovered, type } = props;
-  const { photo_url, name } = user;
+  let { photo_url, name } = user;
+  if (Array.isArray(name)) {
+    name = name.join(", ");
+  }
   const liClassName = isHovered
     ? type + "-user-dropdown selected-user-dropdown"
     : type + "-user-dropdown";
@@ -23,7 +26,7 @@ export default function SearchEntry(props) {
       className={liClassName}
     >
       <img src={photo_url} alt="" className={profileClassName} />
-      <p className={nameClassName}>{name}</p>
+      {name && <p className={nameClassName}>{name}</p>}
     </li>
   );
 }

@@ -101,6 +101,7 @@ function Chats() {
           conversation_id: newConvRef.id,
           participants: participants,
           participants_obj: participants_obj,
+          num_participants: participants.length,
           photo_url: user.photo_url,
           last_message: "",
           last_timestamp: serverTimestamp(),
