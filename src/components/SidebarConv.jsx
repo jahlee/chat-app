@@ -65,7 +65,7 @@ export default function SidebarConv({ conversation, currConv, setCurrConv }) {
         const otherUserIds = conversation.participants.filter(
           (id) => id !== user.userId
         );
-        otherUserIds.map(async (usrId) => {
+        otherUserIds.forEach(async (usrId) => {
           const userDoc = doc(usersRef, usrId);
           const docSnapshot = await getDoc(userDoc);
           if (docSnapshot.exists()) {
@@ -74,11 +74,11 @@ export default function SidebarConv({ conversation, currConv, setCurrConv }) {
             // if active within past 5 minutes
             if (timeDiff / (1000 * 60) < 5) {
               setIsActive(true);
-            } else {
-              setIsActive(false);
+              return;
             }
           }
         });
+        setIsActive(false);
       } catch (e) {
         console.error(e);
       }
@@ -87,7 +87,7 @@ export default function SidebarConv({ conversation, currConv, setCurrConv }) {
     if (conversation.participants) {
       fetchActive();
     }
-  }, [conversation, user, conversation.last_message]);
+  }, [currConv, conversation.participants, conversation.last_message, user]);
 
   let last_timestamp_display = "now";
   try {

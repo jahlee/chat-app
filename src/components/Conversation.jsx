@@ -210,10 +210,6 @@ export default function Conversation({ conv }) {
       if (userSnapshot.exists()) {
         const userData = userSnapshot.data();
         const last_active = userData.last_active.toDate();
-        console.log(
-          "HEHEHEHEHHEHEFALSKDJFASDLKDFJASDDF",
-          (new Date() - last_active) / (1000 * 60)
-        );
         if ((new Date() - last_active) / (1000 * 60) > 1) {
           await updateDoc(userDoc, {
             last_active: serverTimestamp(),
