@@ -1,5 +1,11 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { convRef, filesRef, messagesRef, storage } from "../firebase-config";
+import {
+  convRef,
+  filesRef,
+  messagesRef,
+  statusRef,
+  storage,
+} from "../firebase-config";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import {
   addDoc,
@@ -11,6 +17,7 @@ import {
   orderBy,
   limit,
   updateDoc,
+  getDocs,
 } from "@firebase/firestore";
 import { v4 as uuidv4 } from "uuid";
 import UserContext from "../context/UserContext";
@@ -18,6 +25,7 @@ import ChatInput from "./ChatInput";
 import "../styling/Chats.css";
 import Modal from "./Modal";
 import Message from "./Message";
+import StatusIndicator from "./StatusIndicator";
 
 export default function Conversation({ conv }) {
   const conversation_id = conv ? conv.conversation_id : "";
@@ -25,6 +33,7 @@ export default function Conversation({ conv }) {
   const [imageOpened, setImageOpened] = useState(false);
   const [openImageURL, setOpenImageURL] = useState("");
   const [messageLimit, setMessageLimit] = useState(15);
+  const [lastReadMessage, setLastReadMessage] = useState("");
   const { user } = useContext(UserContext);
   const chatWindowRef = useRef();
 
@@ -54,6 +63,31 @@ export default function Conversation({ conv }) {
     return () => unsubscribe();
   }, [conv, messageLimit]);
 
+  // handle read receipt
+  useEffect(() => {
+    async function handleReadStatus() {
+      if (lastReadMessage !== "") {
+        const q = query(
+          statusRef,
+          where("conversation_id", "==", conversation_id)
+        );
+        const docRef = await getDocs(q);
+        docRef.forEach((document) => {
+          const data = document.data();
+          const statusDoc = doc(statusRef, document.id);
+          updateDoc(statusDoc, {
+            last_read: {
+              ...data.last_read,
+              [user.userId]: lastReadMessage,
+            },
+          });
+        });
+      }
+    }
+    handleReadStatus();
+  }, [lastReadMessage]);
+
+  // handle scroll to top of conversation
   useEffect(() => {
     if (chatWindowRef && chatWindowRef.current) {
       try {
@@ -184,9 +218,13 @@ export default function Conversation({ conv }) {
     let prev_timestamp = new Date(0);
     let showTime = true;
     let showUser = true;
+    let lastRead = "";
     for (let idx = messages.length - 1; idx >= 0; idx--) {
       const message = messages[idx];
       try {
+        if (message.sender_id !== user.userId) {
+          lastRead = message.id;
+        }
         const message_timestamp = message.timestamp.toDate();
         if (idx < messages.length - 1) {
           const timeDiff = message_timestamp - prev_timestamp;
@@ -212,8 +250,12 @@ export default function Conversation({ conv }) {
         />
       );
     }
+    if (lastRead !== "" && lastRead !== lastReadMessage) {
+      setLastReadMessage(lastRead);
+    }
     return (
       <div className="messages-container" ref={chatWindowRef}>
+        <StatusIndicator conv={conv} />
         {returnMessages.reverse()}
       </div>
     );

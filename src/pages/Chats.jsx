@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { convRef } from "../firebase-config";
+import { convRef, statusRef } from "../firebase-config";
 import {
   doc,
   getDocs,
@@ -9,6 +9,7 @@ import {
   query,
   serverTimestamp,
   setDoc,
+  addDoc,
   where,
 } from "@firebase/firestore";
 import Conversation from "../components/Conversation";
@@ -77,8 +78,12 @@ function Chats() {
     participants.push(userId);
     participants.sort();
     const participants_obj = {};
+    const last_read_obj = {};
+    const typing_obj = {};
     participants.forEach((id) => {
       participants_obj[id] = true;
+      last_read_obj[id] = "";
+      typing_obj[id] = false;
     });
     let newConversation = {};
     const newConversationQuery = query(
@@ -105,6 +110,13 @@ function Chats() {
           "successfully created new conversation with data:",
           newConversation
         );
+
+        await addDoc(statusRef, {
+          conversation_id: newConvRef.id,
+          last_read: last_read_obj,
+          typing: typing_obj,
+        });
+        console.log("created status ref as well");
       } catch (e) {
         console.error(e.toString());
       }
