@@ -1,16 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFileImage, faFile } from "@fortawesome/free-regular-svg-icons";
 import "../styling/ChatInput.css";
 
 export default function ChatInput(props) {
-  const { sendMessage } = props;
+  const { sendMessage, handleTyping } = props;
   const [chatInputValue, setChatInputValue] = useState("");
   const [files, setFiles] = useState([]);
   const [previewURLs, setPreviewURLs] = useState([]);
   const [fileError, setFileError] = useState(null);
+  const [isTyping, setIsTyping] = useState(false);
   const MAX_FILES = 5;
   const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10 MB in bytes
+  const typingTimer = useRef(null);
 
   useEffect(() => {
     console.log("files:", files);
@@ -23,6 +25,18 @@ export default function ChatInput(props) {
   useEffect(() => {
     console.log("error:", fileError);
   }, [fileError]);
+
+  useEffect(() => {
+    handleTyping(isTyping);
+  }, [isTyping]);
+
+  useEffect(() => {
+    if (!isTyping) setIsTyping(true);
+    clearTimeout(typingTimer.current);
+    typingTimer.current = setTimeout(() => {
+      setIsTyping(false);
+    }, 5000);
+  }, [chatInputValue]);
 
   function handleChatInputChange(event) {
     setChatInputValue(event.target.value);

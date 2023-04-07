@@ -12,9 +12,6 @@ export default function Search({ setConvByUsers }) {
   const [searchSelected, setSearchSelected] = useState(false);
   const [createNewConv, setCreateNewConv] = useState(false);
   const [newConvUsers, setNewConvUsers] = useState([]);
-  const { user } = useContext(UserContext);
-  const userId = user ? user.userId : "";
-  const convRef = collection(db, "conversations");
   let timeoutId;
 
   useEffect(() => {

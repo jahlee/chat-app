@@ -102,6 +102,22 @@ export default function Conversation({ conv }) {
     }
   }, [messageLimit]);
 
+  async function handleTyping(isTyping) {
+    console.log("handling typing!", isTyping);
+    const q = query(statusRef, where("conversation_id", "==", conversation_id));
+    const docRef = await getDocs(q);
+    docRef.forEach((document) => {
+      const data = document.data();
+      const statusDoc = doc(statusRef, document.id);
+      updateDoc(statusDoc, {
+        typing: {
+          ...data.typing,
+          [user.userId]: isTyping,
+        },
+      });
+    });
+  }
+
   const handleScroll = () => {
     if (
       chatWindowRef.current.clientHeight ===
@@ -274,7 +290,11 @@ export default function Conversation({ conv }) {
         </Modal>
       )}
       {renderMessages()}
-      <ChatInput sendMessage={sendMessage} className="chat-input-container" />
+      <ChatInput
+        sendMessage={sendMessage}
+        handleTyping={handleTyping}
+        className="chat-input-container"
+      />
     </React.Fragment>
   );
 }

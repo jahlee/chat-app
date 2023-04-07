@@ -20,13 +20,16 @@ export default function StatusIndicator({ conv }) {
         querySnapshot.forEach((doc) => {
           const data = doc.data();
           const { last_read, typing } = data;
+          let isTyping = false;
           setRead(last_read);
           for (const key in typing) {
-            if (key !== user.userId && typing[key] === true) {
-              setTyping(true);
+            console.log(key, key !== user.userId && typing[key]);
+            if (key !== user.userId && typing[key]) {
+              isTyping = true;
               break;
             }
           }
+          setTyping(isTyping);
         });
       },
       (err) => {
@@ -39,7 +42,8 @@ export default function StatusIndicator({ conv }) {
 
   return (
     <div>
-      {JSON.stringify(read)} {typing}
+      {/* {JSON.stringify(read)}  */}
+      {typing.toString()}
     </div>
   );
 }
