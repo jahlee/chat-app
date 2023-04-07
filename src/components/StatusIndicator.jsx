@@ -2,10 +2,10 @@ import React, { useContext, useEffect, useState } from "react";
 import UserContext from "../context/UserContext";
 import { limit, onSnapshot, query, where } from "firebase/firestore";
 import { statusRef } from "../firebase-config";
+import "../styling/Chats.css";
 
-export default function StatusIndicator({ conv }) {
+export default function StatusIndicator({ conv, setRead }) {
   const { user } = useContext(UserContext);
-  const [read, setRead] = useState({});
   const [typing, setTyping] = useState(false);
 
   useEffect(() => {
@@ -20,8 +20,17 @@ export default function StatusIndicator({ conv }) {
         querySnapshot.forEach((doc) => {
           const data = doc.data();
           const { last_read, typing } = data;
+          const message_to_user = {};
+          for (const usr in last_read) {
+            const msg = last_read[usr];
+            if (msg in message_to_user) {
+              message_to_user[msg].push(usr);
+            } else {
+              message_to_user[msg] = [usr];
+            }
+          }
+          setRead(message_to_user);
           let isTyping = false;
-          setRead(last_read);
           for (const key in typing) {
             console.log(key, key !== user.userId && typing[key]);
             if (key !== user.userId && typing[key]) {
@@ -41,9 +50,10 @@ export default function StatusIndicator({ conv }) {
   }, [conv]);
 
   return (
-    <div>
-      {/* {JSON.stringify(read)}  */}
-      {typing.toString()}
-    </div>
+    typing && (
+      <p style={{ margin: 0, padding: 0, marginLeft: "5px" }}>
+        Someone is typing...
+      </p>
+    )
   );
 }

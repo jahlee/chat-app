@@ -13,9 +13,11 @@ export default function Message({
   openPdf,
   showUser,
   showTime,
+  usersRead,
 }) {
   const { user } = useContext(UserContext);
   const [senderName, setSenderName] = useState("");
+  const [userReadPhotos, setUserReadPhotos] = useState([]);
   let className = "message ";
   className +=
     message.sender_id === user.userId ? "sent-message " : "receive-message ";
@@ -81,6 +83,31 @@ export default function Message({
     fetchSenderName();
   }, [message, user]);
 
+  useEffect(() => {
+    async function fetchUserPhotos() {
+      try {
+        const photoURLs = [];
+        await Promise.all(
+          usersRead.map(async (usr) => {
+            if (usr !== user.userId) {
+              const userDoc = doc(usersRef, usr);
+              const docSnapshot = await getDoc(userDoc);
+              if (docSnapshot.exists()) {
+                const userData = docSnapshot.data();
+                photoURLs.push(userData.photo_url);
+              }
+            }
+          })
+        );
+        console.log(message.id, usersRead);
+        setUserReadPhotos(photoURLs);
+      } catch (e) {
+        console.error(e);
+      }
+    }
+    fetchUserPhotos();
+  }, [user, usersRead]);
+
   function renderFiles(file_refs) {
     return (
       <div className="files-container">
@@ -106,9 +133,22 @@ export default function Message({
     );
   }
 
+  function renderReadUserPhotos() {
+    // console.log(message.id, userReadPhotos);
+    return (
+      <div className="read-image-container">
+        {userReadPhotos.map((url, idx) => (
+          <img key={idx} src={url} alt={url} className="read-image" />
+        ))}
+      </div>
+    );
+  }
+
   return (
     <React.Fragment>
+      {renderReadUserPhotos()}
       <div className={className}>
+        {message.id}
         {message && message.text && <p>{message.text}</p>}
         {message.file_refs && renderFiles(message.file_refs)}
       </div>

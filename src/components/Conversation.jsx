@@ -34,6 +34,7 @@ export default function Conversation({ conv }) {
   const [openImageURL, setOpenImageURL] = useState("");
   const [messageLimit, setMessageLimit] = useState(15);
   const [lastReadMessage, setLastReadMessage] = useState("");
+  const [allReadMessages, setAllReadMessages] = useState({});
   const { user } = useContext(UserContext);
   const chatWindowRef = useRef();
 
@@ -236,6 +237,7 @@ export default function Conversation({ conv }) {
     let showUser = true;
     let lastRead = "";
     for (let idx = messages.length - 1; idx >= 0; idx--) {
+      let usersRead = [];
       const message = messages[idx];
       try {
         if (message.sender_id !== user.userId) {
@@ -251,10 +253,14 @@ export default function Conversation({ conv }) {
         }
         prev_userId = message.sender_id;
         prev_timestamp = showTime ? message_timestamp : prev_timestamp;
+        if (message.id in allReadMessages) {
+          usersRead = [...allReadMessages[message.id]];
+        }
       } catch (err) {
         showTime = false;
         console.error(err);
       }
+      if (usersRead.length > 0) console.log(idx, message.id, usersRead);
       returnMessages.push(
         <Message
           key={idx}
@@ -263,15 +269,17 @@ export default function Conversation({ conv }) {
           openPdf={openPdf}
           showUser={showUser}
           showTime={showTime}
+          usersRead={usersRead}
         />
       );
     }
     if (lastRead !== "" && lastRead !== lastReadMessage) {
       setLastReadMessage(lastRead);
     }
+    console.log(user.userId, lastRead);
     return (
       <div className="messages-container" ref={chatWindowRef}>
-        <StatusIndicator conv={conv} />
+        <StatusIndicator conv={conv} setRead={setAllReadMessages} />
         {returnMessages.reverse()}
       </div>
     );

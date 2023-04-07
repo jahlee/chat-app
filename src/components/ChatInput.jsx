@@ -31,7 +31,7 @@ export default function ChatInput(props) {
   }, [isTyping]);
 
   useEffect(() => {
-    if (!isTyping) setIsTyping(true);
+    if (!isTyping && chatInputValue !== "") setIsTyping(true);
     clearTimeout(typingTimer.current);
     typingTimer.current = setTimeout(() => {
       setIsTyping(false);
@@ -45,6 +45,7 @@ export default function ChatInput(props) {
   function handleEnter(event) {
     if (event.key === "Enter" && !event.shiftKey) {
       event.preventDefault();
+      setIsTyping(false);
       handleSendMessage(event);
     }
   }

@@ -13,6 +13,7 @@ import {
   convRef,
   filesRef,
   messagesRef,
+  statusRef,
   storage,
   usersRef,
 } from "../firebase-config";
@@ -183,6 +184,17 @@ export default function SidebarConv({ conversation, currConv, setCurrConv }) {
         console.log("Message deleted:", messageDoc.id);
       });
       await Promise.all(deletePromises);
+
+      // delete the status document for this conversation
+      const statusQuery = query(
+        statusRef,
+        where("conversation_id", "==", convId)
+      );
+      const statusSnapshot = await getDocs(statusQuery);
+      statusSnapshot.forEach((statusDoc) => {
+        const statusDocRef = doc(statusRef, statusDoc.id);
+        deleteDoc(statusDocRef);
+      });
 
       // delete the conversation document
       const convDocRef = doc(convRef, convId);
