@@ -146,7 +146,6 @@ export default function Message({
     <React.Fragment>
       {renderReadUserPhotos()}
       <div className={className}>
-        {message.id}
         {message && message.text && <p>{message.text}</p>}
         {message.file_refs && renderFiles(message.file_refs)}
       </div>
