@@ -1,7 +1,4 @@
-import { collection, doc, serverTimestamp, setDoc } from "firebase/firestore";
-import React, { useContext, useEffect, useState } from "react";
-import UserContext from "../context/UserContext";
-import { db } from "../firebase-config";
+import React, { useEffect, useState } from "react";
 import SearchDropdown from "./SearchDropdown";
 import SearchInput from "./SearchInput";
 import "../styling/Search.css";
@@ -14,12 +11,7 @@ export default function Search({ setConvByUsers }) {
   const [newConvUsers, setNewConvUsers] = useState([]);
   let timeoutId;
 
-  useEffect(() => {
-    console.log("search is selected:", searchSelected);
-  }, [searchSelected]);
-
   function handleSearchChange(newSearch) {
-    console.log("changed value to: ", newSearch);
     // debounce, wait 500ms (0.5s) till search for users
     clearTimeout(timeoutId);
     timeoutId = setTimeout(() => {

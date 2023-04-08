@@ -100,7 +100,6 @@ function Profile() {
           const docId = queryDoc.id;
           await deleteDoc(doc(filesRef, docId));
         });
-        console.log("deleted old picture:", user.photo_url);
       } catch (err) {
         console.error("error deleting previous profile picture", err);
       }
@@ -112,7 +111,6 @@ function Profile() {
         photo_url: newPhotoURL,
         last_timestamp: serverTimestamp(),
       });
-      console.log("updated with:", name, newPhotoURL);
     } catch (e) {
       console.error(e);
     }

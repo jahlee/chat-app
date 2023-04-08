@@ -99,7 +99,6 @@ export default function Message({
             }
           })
         );
-        console.log(message.id, usersRead);
         setUserReadPhotos(photoURLs);
       } catch (e) {
         console.error(e);
@@ -134,7 +133,6 @@ export default function Message({
   }
 
   function renderReadUserPhotos() {
-    // console.log(message.id, userReadPhotos);
     return (
       <div className="read-image-container">
         {userReadPhotos.map((url, idx) => (

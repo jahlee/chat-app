@@ -160,7 +160,6 @@ export default function SidebarConv({ conversation, currConv, setCurrConv }) {
             }
           })
         );
-        console.log(conversation, participantsNames.length);
         setConvName(
           participantsNames.length > 1
             ? participantsNames.join(", ")
@@ -187,8 +186,6 @@ export default function SidebarConv({ conversation, currConv, setCurrConv }) {
   const deleteConversation = async () => {
     try {
       const convId = conversation.conversation_id;
-      console.log("deleting convid:", convId);
-
       // get all messages with conversation_id == convId
       const messagesQuery = query(
         messagesRef,
@@ -204,7 +201,6 @@ export default function SidebarConv({ conversation, currConv, setCurrConv }) {
           async (fileRefObj) => {
             const { url, id } = fileRefObj;
             const storageRef = ref(storage, url);
-            console.log("deleting object storage:", storageRef);
             await deleteObject(storageRef);
 
             const fileDocRef = doc(filesRef, id);
@@ -216,7 +212,6 @@ export default function SidebarConv({ conversation, currConv, setCurrConv }) {
         // delete the message document
         const messageDocRef = doc(messagesRef, messageDoc.id);
         await deleteDoc(messageDocRef);
-        console.log("Message deleted:", messageDoc.id);
       });
       await Promise.all(deletePromises);
 
@@ -234,7 +229,6 @@ export default function SidebarConv({ conversation, currConv, setCurrConv }) {
       // delete the conversation document
       const convDocRef = doc(convRef, convId);
       await deleteDoc(convDocRef);
-      console.log("Conversation deleted:", convId);
 
       setCurrConv({
         conversation_id: null,

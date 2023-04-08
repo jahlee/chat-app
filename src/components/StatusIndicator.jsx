@@ -32,7 +32,6 @@ export default function StatusIndicator({ conv, setRead }) {
           setRead(message_to_user);
           let isTyping = false;
           for (const key in typing) {
-            console.log(key, key !== user.userId && typing[key]);
             if (key !== user.userId && typing[key]) {
               isTyping = true;
               break;

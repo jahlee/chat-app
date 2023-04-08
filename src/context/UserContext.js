@@ -25,7 +25,6 @@ export function UserProvider({ children }) {
   }, [authUser]);
 
   const isAuth = Boolean(authUser);
-  console.log(isAuth, authUser);
   const user = authUser
     ? {
         userId: authUser.uid,

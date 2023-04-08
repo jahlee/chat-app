@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { collection, doc, deleteDoc, getDocs } from "firebase/firestore";
 import { db } from "../firebase-config";
-import { RecaptchaVerifier } from "firebase/auth";
 
 function Preview() {
   const [messagesList, setMessagesList] = useState([]);
@@ -13,7 +12,6 @@ function Preview() {
       const data = await getDocs(messagesCollectionRef);
       setMessagesList(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
     };
-
     getMessages();
   }, []);
 

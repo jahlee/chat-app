@@ -7,7 +7,6 @@ const Modal = ({ onClose, children }) => {
 
   // Define the keydown handler for the escape key
   const closeOnEscapeKeyDown = (e) => {
-    console.log(e);
     if ((e.charCode || e.keyCode) === 27 || e.key === "Escape") {
       onClose();
     }

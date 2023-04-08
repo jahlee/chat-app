@@ -20,16 +20,12 @@ function Login() {
     signInWithPopup(auth, provider)
       .then(async (res) => {
         localStorage.setItem("isAuth", true);
-        console.log("login response:", res);
-        console.log("user values:", res.user);
         navigate("/chats");
 
         // add/update user entry in firestore
         const userDoc = doc(db, "users", res.user.uid);
         const docSnapshot = await getDoc(userDoc);
         if (docSnapshot.exists()) {
-          const userData = docSnapshot.data();
-          console.log("old user data:", userData);
           const newTimestamp = serverTimestamp();
           await updateDoc(userDoc, { last_active: newTimestamp }).catch(
             (err) => {
@@ -45,12 +41,11 @@ function Login() {
             photo_url: res.user.photoURL,
             last_active: serverTimestamp(),
           };
-          console.log("creating new entry:", newUser);
           await setDoc(userDoc, newUser);
         }
       })
       .catch((err) => {
-        console.log(err.message);
+        console.error(err.message);
       });
   };
 

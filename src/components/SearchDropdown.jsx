@@ -18,7 +18,6 @@ export default function SearchDropdown({
   const className = type + "-dropdown";
 
   useEffect(() => {
-    console.log("current users for search", search, "is:", users);
     const handleSearch = async () => {
       try {
         let query_users = [];
@@ -33,7 +32,6 @@ export default function SearchDropdown({
         });
         // remove self from entries
         query_users = query_users.filter((usr) => usr.userId !== user.userId);
-        console.log("setting users to:", query_users);
         setUsers(query_users);
 
         // get groupchats with both of these users, prevent duplicate entries
@@ -71,13 +69,11 @@ export default function SearchDropdown({
                     name: names.sort(),
                     photo_url: groupData.photo_url,
                   });
-                  console.log("added!", query_groups);
                 }
               })
             );
           })
         );
-        console.log("qg:", query_groups);
         setGroups(query_groups);
       } catch (err) {
         console.error("err retrieving searched users:", err);

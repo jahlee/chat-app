@@ -106,7 +106,6 @@ export default function Conversation({ conv }) {
   }, [messageLimit]);
 
   async function handleTyping(isTyping) {
-    console.log("handling typing!", isTyping);
     const q = query(statusRef, where("conversation_id", "==", conversation_id));
     const docRef = await getDocs(q);
     docRef.forEach((document) => {
@@ -143,10 +142,7 @@ export default function Conversation({ conv }) {
             const storageName = `messages/${uuid}`;
             const fileRef = ref(storage, storageName);
             const type = file.type.includes("image") ? "image" : "pdf";
-
             await uploadBytes(fileRef, file);
-            console.log("uploaded file!");
-
             const fileURL = await getDownloadURL(fileRef);
 
             // upload file metadata
@@ -161,14 +157,11 @@ export default function Conversation({ conv }) {
               upload_time: serverTimestamp(),
             };
             const newFileRef = await addDoc(filesRef, fileObj);
-            console.log(newFileRef);
-
             const newFileRefObj = {
               id: newFileRef.id,
               url: fileURL,
               type: type,
             };
-
             if (type === "image") {
               image_refs.push(newFileRefObj);
             } else {
@@ -219,14 +212,6 @@ export default function Conversation({ conv }) {
     } catch (e) {
       console.error(e);
     }
-    console.log(
-      "sent message:",
-      message,
-      "and file(s):",
-      files,
-      "with conversation id:",
-      conversation_id
-    );
   }
 
   function openPdf(url) {
@@ -241,7 +226,6 @@ export default function Conversation({ conv }) {
   function openImage(url) {
     setImageOpened(true);
     setOpenImageURL(url);
-    console.log(url, "being opened");
   }
 
   function renderMessages() {
@@ -275,7 +259,6 @@ export default function Conversation({ conv }) {
         showTime = false;
         console.error(err);
       }
-      if (usersRead.length > 0) console.log(idx, message.id, usersRead);
       returnMessages.push(
         <Message
           key={idx}
@@ -291,7 +274,6 @@ export default function Conversation({ conv }) {
     if (lastRead !== "" && lastRead !== lastReadMessage) {
       setLastReadMessage(lastRead);
     }
-    console.log(user.userId, lastRead);
     return (
       <div className="messages-container" ref={chatWindowRef}>
         <StatusIndicator conv={conv} setRead={setAllReadMessages} />

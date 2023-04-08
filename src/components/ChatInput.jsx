@@ -15,18 +15,6 @@ export default function ChatInput(props) {
   const typingTimer = useRef(null);
 
   useEffect(() => {
-    console.log("files:", files);
-  }, [files]);
-
-  useEffect(() => {
-    console.log("urls:", previewURLs);
-  }, [previewURLs]);
-
-  useEffect(() => {
-    console.log("error:", fileError);
-  }, [fileError]);
-
-  useEffect(() => {
     handleTyping(isTyping);
   }, [isTyping]);
 
@@ -51,7 +39,6 @@ export default function ChatInput(props) {
   }
 
   function handleFilesChange(event) {
-    console.log(event);
     const uploadedFiles = event.target.files;
     if (uploadedFiles.length > MAX_FILES) {
       setFileError("Cannot have more than 5 files uploaded at a time");
@@ -117,7 +104,6 @@ export default function ChatInput(props) {
     // send data to backend
     if (chatInputValue || files) {
       sendMessage(chatInputValue, files);
-      console.log(chatInputValue, "sent");
       setChatInputValue("");
       setFiles([]);
       for (const urlObj of previewURLs) {

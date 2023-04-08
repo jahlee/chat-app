@@ -35,10 +35,6 @@ function Chats() {
   }, [isAuth]);
 
   useEffect(() => {
-    console.log("currconv changed!", currConv);
-  }, [currConv]);
-
-  useEffect(() => {
     // get conversations from db
     const conversationsQuery = query(
       convRef,
@@ -47,7 +43,6 @@ function Chats() {
       limit(10)
     );
 
-    console.log(userId, conversationsQuery);
     const unsubscribe = onSnapshot(
       conversationsQuery,
       (querySnapshot) => {
@@ -56,7 +51,6 @@ function Chats() {
           items.push(doc.data());
         });
         setConversations(items);
-        console.log("conversations:", items);
 
         if (items) {
           // set current conv to the most recent conversation on first load
@@ -72,8 +66,6 @@ function Chats() {
   }, [user]);
 
   const setConversationByUsers = async (usrs) => {
-    // where("participants", "==", [id1, id2])
-    console.log(usrs);
     const participants = usrs.map((usr) => usr.userId);
     participants.push(userId);
     participants.sort();
@@ -107,17 +99,12 @@ function Chats() {
           last_timestamp: serverTimestamp(),
         };
         await setDoc(newConvRef, newConversation);
-        console.log(
-          "successfully created new conversation with data:",
-          newConversation
-        );
 
         await addDoc(statusRef, {
           conversation_id: newConvRef.id,
           last_read: last_read_obj,
           typing: typing_obj,
         });
-        console.log("created status ref as well");
       } catch (e) {
         console.error(e.toString());
       }
