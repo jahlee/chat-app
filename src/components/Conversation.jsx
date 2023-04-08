@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useContext, useEffect, useRef, useState } from "react";
 import {
   convRef,
@@ -29,6 +30,12 @@ import Modal from "./Modal";
 import Message from "./Message";
 import StatusIndicator from "./StatusIndicator";
 
+/**
+ * The component that holds the entire current conversation, including
+ * the messages, files, read/typing statuses, and current user input
+ *
+ * @param {Object} conv - Holds the FB reference to the current conversation
+ */
 export default function Conversation({ conv }) {
   const conversation_id = conv ? conv.conversation_id : "";
   const [messages, setMessages] = useState([]);
@@ -133,8 +140,8 @@ export default function Conversation({ conv }) {
     try {
       const image_refs = [];
       const pdf_refs = [];
+      // upload files and get their urls/references
       if (files && files.length > 0) {
-        // eslint-disable-next-line array-callback-return
         await Promise.all(
           Array.from(files).map(async (file) => {
             const uuid = uuidv4();
@@ -197,7 +204,7 @@ export default function Conversation({ conv }) {
         last_timestamp: serverTimestamp(),
       });
 
-      // update user's last_active (by the minute rather than on every push)
+      // update user's last_active timestamp (after 1 minute)
       const userDoc = doc(usersRef, user.userId);
       const userSnapshot = await getDoc(userDoc);
       if (userSnapshot.exists()) {

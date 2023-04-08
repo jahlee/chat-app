@@ -7,6 +7,17 @@ import UserContext from "../context/UserContext";
 import { doc, getDoc } from "firebase/firestore";
 import "../styling/Chats.css";
 
+/**
+ * A message in a conversation
+ *
+ * @param {String} message - content of the text message
+ * @param {Function} openImage - open image in modal when click
+ * @param {Function} openPdf - open pdf in another link when click
+ * @param {Boolean} showUser - should show the sender's name at top of chunk
+ * @param {Boolean} showTime - should show timestamp of current message
+ * @param {Array} usersRead - list of users that have read this message
+ *
+ */
 export default function Message({
   message,
   openImage,
@@ -83,13 +94,15 @@ export default function Message({
     fetchSenderName();
   }, [message, user]);
 
+  // get photos of users who have read this message
   useEffect(() => {
     async function fetchUserPhotos() {
       try {
         const photoURLs = [];
         await Promise.all(
-          usersRead.map(async (usr) => {
-            if (usr !== user.userId) {
+          usersRead.map(async (usr, idx) => {
+            // have up to 5 users shown
+            if (usr !== user.userId && idx < 5) {
               const userDoc = doc(usersRef, usr);
               const docSnapshot = await getDoc(userDoc);
               if (docSnapshot.exists()) {

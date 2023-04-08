@@ -18,6 +18,9 @@ import UserContext from "../context/UserContext";
 import "../styling/Chats.css";
 import { useNavigate } from "react-router-dom";
 
+/**
+ * Chats page
+ */
 function Chats() {
   const [currConv, setCurrConv] = useState(null);
   const [conversations, setConversations] = useState([]);
@@ -32,6 +35,7 @@ function Chats() {
       }
     }, 500);
     return () => clearTimeout(wait);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuth]);
 
   useEffect(() => {

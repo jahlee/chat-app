@@ -6,6 +6,9 @@ import { usersRef } from "../firebase-config";
 
 const UserContext = createContext();
 
+/**
+ * user information that is retrieved from FB useAuthState hook
+ */
 export function UserProvider({ children }) {
   const [authUser] = useAuthState(auth);
   const [userDoc, setUserDoc] = useState(null);

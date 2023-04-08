@@ -3,8 +3,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFileImage, faFile } from "@fortawesome/free-regular-svg-icons";
 import "../styling/ChatInput.css";
 
-export default function ChatInput(props) {
-  const { sendMessage, handleTyping } = props;
+/**
+ * The input section of the conversation where you can add text and files
+ *
+ * @param {Function} sendMessage - Handle sending a message
+ * @param {Function} handleTyping - Update value of message to be sent
+ */
+export default function ChatInput({ sendMessage, handleTyping }) {
   const [chatInputValue, setChatInputValue] = useState("");
   const [files, setFiles] = useState([]);
   const [previewURLs, setPreviewURLs] = useState([]);
@@ -18,6 +23,7 @@ export default function ChatInput(props) {
     handleTyping(isTyping);
   }, [isTyping]);
 
+  // if the user stops typing for 5 seconds, set isTyping to false
   useEffect(() => {
     if (!isTyping && chatInputValue !== "") setIsTyping(true);
     clearTimeout(typingTimer.current);
@@ -97,11 +103,8 @@ export default function ChatInput(props) {
   }
 
   function handleSendMessage(event) {
-    // prevent form from beng submitted + page refresh
+    // prevents form from being submitted (page refresh)
     event.preventDefault();
-    // display message on frontend
-    // need prop of function that changes frontend messages
-    // send data to backend
     if (chatInputValue || files) {
       sendMessage(chatInputValue, files);
       setChatInputValue("");

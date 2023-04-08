@@ -1,9 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import SearchDropdown from "./SearchDropdown";
 import SearchInput from "./SearchInput";
 import "../styling/Search.css";
 import Modal from "./Modal";
 
+/**
+ * Search component that includes searchinput + modal if create new conv
+ *
+ * @param {Function} setConvByUsers - create/set conversation by userids
+ */
 export default function Search({ setConvByUsers }) {
   const [search, setSearch] = useState("");
   const [searchSelected, setSearchSelected] = useState(false);

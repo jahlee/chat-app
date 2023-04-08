@@ -22,6 +22,13 @@ import groupchat_logo from "../assets/groupchat.png";
 import "../styling/Sidebar.css";
 import Modal from "./Modal";
 
+/**
+ * Each entry of the array of conversations that the user has
+ *
+ * @param {Object} conversation - conversation of this component
+ * @param {Object} currConv - current conversation being displayed
+ * @param {Function} setCurrConv - change displayed conv to this conv
+ */
 export default function SidebarConv({ conversation, currConv, setCurrConv }) {
   const [showDel, setShowDel] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
@@ -31,6 +38,7 @@ export default function SidebarConv({ conversation, currConv, setCurrConv }) {
   const [isActive, setIsActive] = useState(false);
   const { user } = useContext(UserContext);
 
+  // get conversation photo
   useEffect(() => {
     async function fetchPhotoURL() {
       try {
@@ -59,6 +67,7 @@ export default function SidebarConv({ conversation, currConv, setCurrConv }) {
     }
   }, [conversation, user]);
 
+  // get active status of conversation/user
   useEffect(() => {
     async function fetchActive() {
       try {
@@ -89,6 +98,54 @@ export default function SidebarConv({ conversation, currConv, setCurrConv }) {
     }
   }, [currConv, conversation.participants, conversation.last_message, user]);
 
+  // get name of sender of last message
+  useEffect(() => {
+    async function fetchLastUserName() {
+      try {
+        if (conversation.last_message_userId === user.userId) {
+          setLastUserName("You");
+        } else {
+          const userDoc = doc(usersRef, conversation.last_message_userId);
+          const docSnapshot = await getDoc(userDoc);
+          if (docSnapshot.exists()) {
+            const userData = docSnapshot.data();
+            setLastUserName(userData.name);
+          }
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    }
+    fetchLastUserName();
+  }, [conversation, user]);
+
+  // get names of users in this conversation
+  useEffect(() => {
+    async function fetchUserNames() {
+      try {
+        const participantsNames = [];
+        await Promise.all(
+          conversation.participants.map(async (id) => {
+            if (id !== user.userId) {
+              const userDoc = doc(usersRef, id);
+              const docSnapshot = await getDoc(userDoc);
+              participantsNames.push(docSnapshot.data().name);
+            }
+          })
+        );
+        setConvName(
+          participantsNames.length > 1
+            ? participantsNames.join(", ")
+            : participantsNames.join("")
+        );
+      } catch (e) {
+        console.error(e);
+      }
+    }
+    fetchUserNames();
+  }, [conversation, user]);
+
+  // get last timestamp
   let last_timestamp_display = "now";
   try {
     const timestamp_date = conversation.last_timestamp.toDate();
@@ -126,51 +183,6 @@ export default function SidebarConv({ conversation, currConv, setCurrConv }) {
   } catch (e) {
     console.error(e);
   }
-
-  useEffect(() => {
-    async function fetchLastUserName() {
-      try {
-        if (conversation.last_message_userId === user.userId) {
-          setLastUserName("You");
-        } else {
-          const userDoc = doc(usersRef, conversation.last_message_userId);
-          const docSnapshot = await getDoc(userDoc);
-          if (docSnapshot.exists()) {
-            const userData = docSnapshot.data();
-            setLastUserName(userData.name);
-          }
-        }
-      } catch (e) {
-        console.error(e);
-      }
-    }
-    fetchLastUserName();
-  }, [conversation, user]);
-
-  useEffect(() => {
-    async function fetchUserNames() {
-      try {
-        const participantsNames = [];
-        await Promise.all(
-          conversation.participants.map(async (id) => {
-            if (id !== user.userId) {
-              const userDoc = doc(usersRef, id);
-              const docSnapshot = await getDoc(userDoc);
-              participantsNames.push(docSnapshot.data().name);
-            }
-          })
-        );
-        setConvName(
-          participantsNames.length > 1
-            ? participantsNames.join(", ")
-            : participantsNames.join("")
-        );
-      } catch (e) {
-        console.error(e);
-      }
-    }
-    fetchUserNames();
-  }, [conversation, user]);
 
   let className = "sidebar-conv";
   if (currConv && currConv.conversation_id === conversation.conversation_id) {

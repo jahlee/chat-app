@@ -1,9 +1,24 @@
 import React from "react";
 import "../styling/Search.css";
 
-export default function SearchEntry(props) {
-  const { user, onHover, onSelect, isHovered, type } = props;
+/**
+ * One of the entries that were found with the search
+ *
+ * @param {Object} user - user that is found
+ * @param {Function} onHover - action when hovering entry
+ * @param {Function} onSelect - action when select entry
+ * @param {Boolean} isHovered - check if currently hovered
+ * @param {String} type - sidebar/modal for specific styling
+ */
+export default function SearchEntry({
+  user,
+  onHover,
+  onSelect,
+  isHovered,
+  type,
+}) {
   let { photo_url, name } = user;
+  // handle groups
   if (Array.isArray(name)) {
     name = name.join(", ");
   }

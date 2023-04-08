@@ -13,6 +13,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSquareFacebook } from "@fortawesome/free-brands-svg-icons";
 import "../styling/Login.css";
 
+/**
+ * Login page
+ */
 function Login() {
   const navigate = useNavigate();
 

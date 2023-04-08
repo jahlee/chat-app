@@ -4,10 +4,18 @@ import { limit, onSnapshot, query, where } from "firebase/firestore";
 import { statusRef } from "../firebase-config";
 import "../styling/Chats.css";
 
+/**
+ * Component that handles each user's last read message of convo
+ * and whether or not a user is typing
+ *
+ * @param {Object} conv - conversation for this status indicator
+ * @param {Function} setRead - function to set last read message
+ */
 export default function StatusIndicator({ conv, setRead }) {
   const { user } = useContext(UserContext);
   const [typing, setTyping] = useState(false);
 
+  // update last read and is typing for status document of this conversation
   useEffect(() => {
     const statusQuery = query(
       statusRef,
@@ -46,6 +54,7 @@ export default function StatusIndicator({ conv, setRead }) {
     );
 
     return () => unsubscribe();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [conv]);
 
   return (

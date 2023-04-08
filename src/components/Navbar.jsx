@@ -5,6 +5,9 @@ import UserContext from "../context/UserContext";
 import { auth } from "../firebase-config";
 import "../styling/Navbar.css";
 
+/**
+ * Navbar that links to other pages
+ */
 function Navbar() {
   const { isAuth } = useContext(UserContext);
   const location = useLocation();

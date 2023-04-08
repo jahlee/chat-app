@@ -22,6 +22,9 @@ import {
 } from "firebase/storage";
 import Modal from "../components/Modal";
 
+/**
+ * User profile page
+ */
 function Profile() {
   const { user } = useContext(UserContext);
   const [editName, setEditName] = useState(false);

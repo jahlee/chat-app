@@ -14,6 +14,7 @@ function Home() {
       }
     }, 500);
     return () => clearTimeout(wait);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuth]);
 
   if (isAuth) {

@@ -2,6 +2,12 @@ import React, { useEffect, useRef } from "react";
 import ReactDOM from "react-dom";
 import "../styling/Modal.css";
 
+/**
+ * A modal/popup that displays a children component
+ *
+ * @param {Function} onClose - action when close modal
+ * @param {Component} children - component to show in modal
+ */
 const Modal = ({ onClose, children }) => {
   const modalRef = useRef();
 
@@ -18,6 +24,7 @@ const Modal = ({ onClose, children }) => {
     return function cleanup() {
       document.body.removeEventListener("keydown", closeOnEscapeKeyDown);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return ReactDOM.createPortal(
